@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+   # mysql:
+   #    image: mysql
+   #    container_name: meteoreo-mysql
+   api:
+      container_name: meteoreo-api
+      build:
+        context: ./app
+        dockerfile: /Users/thblckjkr/source/repos/meteoreo-api/Dockerfile
+      # depends_on:
+      #   - mysql
+      # volumes:
+      #   - ./embedding-models/:/models/
+      environment:
+         - PORT=$PROD_PORT
+         - PRE_START_PATH="/scripts/start-jupyter.sh"
+         - GRACEFUL_TIMEOUT=300
+         - WEB_CONCURRENCY=2
+      ports:
+        - "$PROD_PORT:$PROD_PORT"
+        - "$JUP_PORT:$JUP_PORT"
+  
