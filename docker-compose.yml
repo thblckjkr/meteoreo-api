@@ -1,24 +1,37 @@
 version: '3.3'
 
 services:
-   # mysql:
-   #    image: mysql
-   #    container_name: meteoreo-mysql
-   api:
-      container_name: meteoreo-api
-      build:
-        context: ./app
-        dockerfile: /Users/thblckjkr/source/repos/meteoreo-api/Dockerfile
-      # depends_on:
-      #   - mysql
-      # volumes:
-      #   - ./embedding-models/:/models/
-      environment:
-         - PORT=$PROD_PORT
-         - PRE_START_PATH="/scripts/start-jupyter.sh"
-         - GRACEFUL_TIMEOUT=300
-         - WEB_CONCURRENCY=2
-      ports:
-        - "$PROD_PORT:$PROD_PORT"
-        - "$JUP_PORT:$JUP_PORT"
-  
+  mysql:
+    image: mysql
+    container_name: meteoreo-mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - meteoreo-backend
+
+  api:
+    container_name: meteoreo-api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - './:/app:delegated'
+    depends_on:
+      - mysql
+    environment:
+      - WEB_CONCURRENCY=2
+      - PORT=80
+      - PRE_START_PATH=/app/app/prestart.sh
+    ports:
+      - "8000:80"
+    networks:
+      - meteoreo-backend
+
+networks:
+  meteoreo-backend:
+    driver: bridge
