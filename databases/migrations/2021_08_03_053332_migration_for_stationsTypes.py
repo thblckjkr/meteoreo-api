@@ -8,9 +8,10 @@ class MigrationForStationTypes(Migration):
         """
         Run the migrations.
         """
-        with self.schema.create("station_types") as table:
+        with self.schema.create("station_connection") as table:
             table.increments("id")
-            table.string("name")
+            table.string("key")
+				table.string("model")
 
             # Soft deletes to maintain integrity
             table.soft_deletes()

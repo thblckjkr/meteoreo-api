@@ -1,18 +1,22 @@
 from masoniteorm.connections import ConnectionResolver
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 DATABASES = {
   "default": "mysql",
   "mysql": {
-    "host": "mysql",
+    "host": os.getenv("MYSQL_HOST", "mysql"),
     "driver": "mysql",
-    "database": "meteoreo",
-    "user": "root",
-    "password": "root",
-    "port": 3306,
+    "database":  os.getenv("MYSQL_DATABASE"),
+    "user":  os.getenv("MYSQL_USERNAME"),
+    "password": os.getenv("MYSQL_PASSWORD"),
+    "port": os.getenv("MYSQL_PORT", 3306),
     "prefix": "",
     "logging_queries": False,
     "options": {
-      #  
+      #
     }
   }
 }
