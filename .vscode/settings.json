@@ -1,5 +1,6 @@
 {
 	"python.jediEnabled": true,
 	"python.languageServer": "Jedi",
-	"python.linting.enabled": false
+	"python.linting.enabled": true,
+  "python.formatting.autopep8Args": ["--indent-size=2"]
 }
