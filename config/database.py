@@ -1,8 +1,5 @@
 from masoniteorm.connections import ConnectionResolver
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 
 DATABASES = {
   "default": "mysql",
