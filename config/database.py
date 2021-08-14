@@ -19,7 +19,7 @@ DATABASES = {
       "options": {
          #
       }
-   }
+  },
 }
 
 DB = ConnectionResolver().set_connection_details(DATABASES)
