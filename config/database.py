@@ -20,6 +20,11 @@ DATABASES = {
          #
       }
   },
+  "sqlite": {
+      "driver": "sqlite",
+      "database": os.getenv("SQLITE_DATABASE"),
+      "logging_queries": False,
+  }
 }
 
 DB = ConnectionResolver().set_connection_details(DATABASES)
