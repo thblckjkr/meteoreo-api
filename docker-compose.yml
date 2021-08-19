@@ -11,6 +11,8 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    ports:
+      - "3306:3306"
     networks:
       - meteoreo-backend
 
@@ -29,7 +31,7 @@ services:
       - PRE_START_PATH=/app/app/prestart.sh
       - GUNICORN_CMD_ARGS="--reload"
     ports:
-      - "8000:80"
+      - "81:80"
     networks:
       - meteoreo-backend
 

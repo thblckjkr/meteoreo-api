@@ -1,0 +1,25 @@
+{
+  "configurations": [{
+      "name": "Python: FastAPI - current file",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${fileDirname}",
+      "module": "uvicorn",
+      "args": [
+        "${fileBasenameNoExtension}:app"
+      ],
+      "jinja": true
+    },
+    {
+      "name": "Python: FastAPI - app",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "app.main:app"
+      ],
+      "cwd": "${workspaceFolder}",
+      "jinja": true,
+    }
+  ]
+}
