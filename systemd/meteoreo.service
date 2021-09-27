@@ -1,0 +1,10 @@
+[Unit]
+Description=Meteoreo Reporting Scheduler
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/meteoreo --scan
+Restart=on-success
+
+[Install]
+WantedBy=multi-user.target

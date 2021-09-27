@@ -37,10 +37,13 @@ def put_station(stationRequest: StationRequest.Schema):
   """
   Create a station with all the information provided from the StationRequest.Schema
   """
-  station = Station().create( stationRequest )
+  #  Generate a XML according to the Schema http://cecatev.uacj.mx/Estaciones.xml after the request
+  station = Station()
 
-  # station.name = stationRequest.name
-  # station.ip = stationRequest.ip
+  station.name = stationRequest.name
+  station.ip = stationRequest.ip
+  station.port = stationRequest.port
+
   station.save().fresh()
 
   return station.serialize()

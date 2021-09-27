@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
+
+parser.add_argument(
+    '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', type=str, default=None)
+parser.add_argument(
+    '--report', '-r',  help='Report via CLI the status of a given station', type=str, default=None)
+
+args = parser.parse_args()
+
+if args.scan:
+  print("Scanning station %s" % args.scan)
+
+
+# from .app/models/Station/Station import Station
+
+# stations = Station.all()
+
+# # Loop through all stations
+# for station in stations:
+#     print(f'Escaneando estacion %s \n' % station.name)
