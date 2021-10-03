@@ -1,0 +1,35 @@
+{
+  // Nombre de servicio: Weewx
+  "weewx": {
+    // Este es el comando que ejecutamos para obtener los datos del servicio
+    "command": "systemctl weewx status",
+
+    // Y esto es lo que esperamos, en out o err, según sea el caso
+    "expects": {
+      "stdout": "Active: active (running)",
+      "stderr": null, // Null implica que esperamos que se encuentre vacío
+
+      // Directiva de problemas que nos podemos encontrar, junto con sus respectivas acciones y soluciones
+      "directive": [
+        {
+        "name": "Problema de conexión a la consola Davis por puerto serial",
+        "expects": {
+          "stdout": "vantage: Unable to wake up console",
+          "action": "sudo wee_device --clear-memory && sudo wee_device --info",
+
+          "directive": [
+            // There is no connection to clear the memory of the station
+            {
+              "name": "No tenemos conexión para limpiar la memoria de la estación",
+              "expects": {
+                "stdout": "OSError: [Errno 11] Resource temporarily unavailable",
+                "action": "sudo systemctl stop serial-getty@ttyS0.service"
+              }
+            }
+          ]
+        }
+      }
+    ]
+    }
+  }
+}

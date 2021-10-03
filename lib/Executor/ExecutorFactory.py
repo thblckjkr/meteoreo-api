@@ -1,7 +1,13 @@
 from typing import Callable
-from .Executor import Executor
 
-ogger = logging.getLogger(__name__)
+import logging
+import subprocess
+import shlex
+import paramiko
+
+from .Executor import ExecutorBase
+
+logger = logging.getLogger(__name__)
 
 
 class ExecutorFactory:
@@ -48,3 +54,49 @@ class ExecutorFactory:
     exec_class = cls.registry[name]
     executor = exec_class(**kwargs)
     return executor
+
+
+@ExecutorFactory.register('SSH')
+class RemoteExecutor(ExecutorBase):
+  def __init__(self, **kwargs):
+    """ Constructor """
+    self._hostname = kwargs.get('hostname', 'localhost')
+    self._port = kwargs.get('port', 22)
+    self._username = kwargs.get('username', None)
+    self._password = kwargs.get('password', None)
+    self._pem = kwargs.get('pem', None)
+
+  def run(self, command: str) -> (str, str):
+    """ Runs the command using paramiko """
+
+    # Creates the client, connects and executes the command
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(hostname=self._hostname,
+                   port=self._port,
+                   username=self._username,
+                   password=self._password,
+                   pkey=paramiko.RSAKey.from_private_key_file(self._pem) if self._pem else None)
+
+    stdin, stdout, stderr = client.exec_command(command)
+    out=stdout.read().decode().strip()
+    err=stderr.read().decode().strip()
+
+    client.close()
+    return out, err
+
+
+@ExecutorFactory.register('local')
+class LocalExecutor(ExecutorBase):
+
+  def run(self, command: str) -> (str, str):
+    """ Runs the given command using subprocess """
+
+    args = shlex.split(command)
+    stdout, stderr = subprocess.Popen(args,
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.PIPE).communicate()
+
+    out = stdout.decode('utf-8')
+    err = stderr.decode('utf-8')
+    return out, err
