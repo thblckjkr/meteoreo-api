@@ -2,11 +2,19 @@
 
 # The main idea is to have everything handled by the main exception handler
 # and not to have to deal with the connection errors in the code
-class PortConnectionError(Exception):
+
+# Base network error handling
+class NetworkError(Exception):
   pass
 
-class IPConnectionError(Exception):
+
+class PortConnectionError(NetworkError):
   pass
+
+
+class IPConnectionError(NetworkError):
+  pass
+
 
 class GenericException(Exception):
   action_path = None
