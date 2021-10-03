@@ -1,19 +1,60 @@
 #!/usr/bin/env python3
 
 import argparse
-import sys
+import config.sentry
+
 parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
 
 parser.add_argument(
-    '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', type=str, default=None)
+    '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', action='store_true')
 parser.add_argument(
     '--report', '-r',  help='Report via CLI the status of a given station', type=str, default=None)
+parser.add_argument(
+    '--user', '-u', help='(optional) User to connect to the station', type=str, default=None)
+parser.add_argument(
+    '--password', '-p', help='(optional) Password to use for the report', type=str, default=None)
+parser.add_argument(
+    '--station', '-t', help='Station to report data on (if not provided, it will scan all stations)', type=str, default=None)
+parser.add_argument(
+    '--verbose', '-v', help='Verbose mode', action='store_true')
+parser.add_argument(
+    '--debug', '-d', help='Debug mode', action='store_true')
 
 args = parser.parse_args()
 
-if args.scan:
-  print("Scanning station %s" % args.scan)
 
+stations = [
+    {
+        'name': 'Estación Babícora',
+        'ip': '148.210.8.32',
+        'port': 22,
+    },
+    {
+        'name': 'Estación IIT',
+        'ip': '148.210.123.117',
+        'port': 22,
+    },
+    {
+        'name': 'Estación Anapra',
+        'ip': '148.210.8.31',
+        'port': 22,
+    },
+]
+
+if args.scan:
+  if args.station:
+    print("Scanning station %s" % args.station)
+    stations = []
+  else:
+    print("Scanning all stations")
+    for station in stations:
+      print("Scanning station %s" % station['name'])
+
+      import lib.drivers.davis
+      status = lib.drivers.davis.DavisStation(
+          station['ip'], station['port'],
+          args.user, args.password)
+      status.get_services()
 
 # from .app/models/Station/Station import Station
 

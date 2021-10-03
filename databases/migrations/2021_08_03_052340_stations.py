@@ -12,6 +12,7 @@ class MigrationForStations(Migration):
       table.uuid("id")
       table.string("name").unique()
       table.unsigned("ip")
+      table.unsigned("port")
 
       # Define primary ID's
       table.primary('id')
