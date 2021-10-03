@@ -11,9 +11,78 @@ La idea es que esto sirva como un registro informal de lo que pasa por mio cabez
 
 ## Identificación de requisitos
 
+### Recabado de información del estado de las estaciones
 
+Debido a la naturaleza autónoma de las estaciones meteorológicas, y a que el hecho que las mismas se encuentran sometidas a [something something] se busca crear un sistema centralizado de recolección de información 
+
+### Conexión a estaciones remotas
+
+La conexión a las estaciones remotas se creó como un sistema modular de conexiones. Teniendo el objetivo de la extensibilidad como objetivo prioritario para el sistema de interacción con las interfaces.
+
+Cada sistema de conexión supone sus propios retos, si bien hay diversos métodos de conexión que podrían ser útiles para la conexión a las estaciones meteorológicas, se decidió enfocarse en la conexión vía SSH a las estaciones meteorológicas que poseen una RaspberryPI como *datalogger* y como medio de interfaz que se encuentran conectadas por medio de puerto serial a las mismas. Y de las estaciones meteorológicas Campbell, que poseen diversos protocolos de comunicación pero se decidió por utilizar el protocolo HTTP.
+
+Para la conexión a las estaciones RaspberryPi se considera lo siguiente:
+
+-  Actualmente cuentan con una VPN configurada para facilitar el acceso a SSH por medio de una dirección IP en el mismo segmento de red que el segmento al que se pretende el servidor final tenga.
+- Ocasionalmente, las estaciones meteorológicas perderán acceso a la VPN, ya sea por fallas técnicas del servidor, del ISP, pérdidas de energía eléctrica o demás.
+- Que una estación se encuentre fuera de línea de la VPN temporalmente no implica que esta no pueda operar, o incluso que no pueda contactar al servidor, tal como se observa en la **Figura 1.1**
+
+![Figura 1.1](/home/thblckjkr/repos/tesis/resources/conexion.png)
+
+Por esta razón se optó por tener un servicio de monitoreo bidireccional. Se pretende que cambiando el ejecutor de servicios, se pueda obtener la información de la estación meteorológica sin necesidad de realizar diferentes implementaciones para cada caso. En este caso, se pretende que un script funcione en el mismo 
+
+#### Consideraciones de seguridad
+
+Debido a que generalmente no se crea una red virtual privada separada para el manejo exclusivo de estaciones meteorológicas (ya que estas suelen instalarse sobre infraestructura existente) es importante tener consideraciones de seguridad respecto a el acceso a las estaciones, debido a que pueden ser un punto de acceso a una, otherwise, isolada y segura red.
+
+**De la conexión del servidor a las estaciones meteorológicas**
+
+Para realizar la conexión a las estaciones meteorológicas se requiere de acceso a la raspberrypi que funciona como puente entre ambas. Para realizar cambios, crear un servicio, y establecer la información del sistema con una mínima interacción se requiere de un usuario de alta prioridad a la máquina. En el caso del sistema operativo basado en linux que utilizan las estaciones, es el usuario con la mayor cantidad de procesos `root`.
+
+Al considerarse comprometido el ambiente de la apliación, se consideraría comprometido el sistema completo. Ya que en este ambiente se encontrarán las contraseñas de acceso a la base de datos y la llave privada que se utiliza para hacer autenticación, si bien existen servicios como Aws-KMS (Key Management Service), el implementar un sistema tan robusto para la administración de secretos sale de los objetivos de este proyecto. (It's beyond scope).
+
+Por lo tanto, se decidió crear un servicio que tome un usuario y password con acceso "root" de forma temporal (o al menos uno que tenga permisos de `sudoer`) y utilizarlo para almacenar la llave pública local del servidor para realizar operaciones sin tener un usuario/password almacenado en la base de datos que pudiera ser comprometido. De esta forma, se mitiga el impacto de una posible intrusión a la base de datos, para no comprometer las credenciales de acceso a las estaciones.
+
+**De las estaciones meteorológicas al servidor**
+
+Debido a que las estaciones meteorológicas suelen ser instaladas en puntos con poco o mínimo control de seguridad física, se busca mitigar el acceso de las estaciones meteorológicas a la base de datos en la que se centralizarán los datos. Por lo tanto, se decidió utilizar un protocolo de API para insertar los eventos.
+
+TODO POR API.
 
 ## Diseño del sistema
+
+También
+
+### Casos principales para resolución
+
+**Conectividad de red**
+
+- No hay conexión de ninguna dirección
+- No hay VPN pero sí conexión de la estación al servidor, 
+- No hay servidor VPN
+
+**Weewx, davis, serial overload:** Problemas de comunicación serial de Davis a la RPi.
+
+Esto pasa cuando se des-sincroniza
+
+- Reiniciar puerto serial. `vantage: Unable to wake up console` 
+
+```
+$ sudo wee_device --clear-memory
+$ sudo wee_device --info
+
+OSError: [Errno 11] Resource temporarily unavailable # This line is the important of the output
+```
+
+`sudo systemctl stop serial-getty@ttyS0.service`
+
+Hacer retry para `sudo wee_device --info`
+
+
+
+(IF TCP not running)
+
+`/mount/usb/` proxy o port-forwarding
 
 
 
@@ -113,6 +182,8 @@ En este archivo se especifica un nombre para identificar el ambiente de desarrol
 
 Debido a la facilidad de uso que ofrecen las librerías de conexión *ORM* para la traducción de bases de datos a modelos de código, se decidió utilizarlas. La librería específica que se decidió utilizar para el desarrollo del proyecto es  *Masonite-ORM* debido a que ofrece un ambiente de trabajo agnóstico a otras librerías, y tiene una amplia compatibilidad con diferentes motores de bases de datos.
 
+De acuerdo al artículo [10.1007/978-3-642-10424-4_13](https://link.springer.com/chapter/10.1007/978-3-642-10424-4_13), la 
+
 Se preparó un script para la inserción de la información a la base de datos de la siguiente forma:
 
 
@@ -149,7 +220,7 @@ Estaba pensando en utilizar un sistema tal como *dramatiq.io* o *celery* para el
 
 El problema que celery presenta, es que no se puede utilizar en este proyecto por la [limitada compatibilidad](https://dramatiq.io/motivation.html#compared-to). Y el competidor más convincente (dramatiq.io) no tiene soporte para conexiones a bases de datos estándar, sólo a RabbitMQ o Redis, en  este caso, nos supone un problema ya que no quiero iuntroducir la complejidad extra que supone una base de datos como es Redis para un proyecto en el que hay tan poca necesidad de paralelismo.
 
-Además, viendo un ejemplo similar (icinga, debido a el codebase tan limpio y a que es open source), si ellos utilizan para un sistema a nivel mundial un sistema de reportes [que depende de systemd para llamar un script en php](https://github.com/Icinga/icingaweb2-module-reporting) este sistema similar, pero a menor escala no debería sufrir un impacto grande por hacer algo similar en python.
+Además, viendo un ejemplo similar (icinga, debido a el codebase tan limpio y a que es open source), si ellos utilizan para un sistema a nivel mundial un sistema de reportes [que depende de systemd para llamar un script en php](https://github.com/Icinga/icingaweb2-module-reporting) este sistema similar, pero a menor escala no debería sufrir un impacto gra nde por hacer algo similar en python.
 
 Entonces se decidió hacer un archivo "run.py" o similar, que sea llamado por systemd cada X minutos, para que funcione como base principal del monitoreo con daemon.
 
@@ -165,7 +236,9 @@ Una de las desiciones que se tomó al momento de hacer el diseǹo de los registr
 
 Se separaron los registros de información en dos tipos de archivos. En un log para datos d conexión, de estado de servicios y demás cosas que se requieran, y otro log para la información de errores y excepciones del sistema.
 
-### Seguridad para conexión a Raspberrys
+
+
+
 
 Tomar un Usuario y pasword, utilizarlos para subir a la raspberry el archivo de monitoreo ycrear un usuario y password para conectarse a la raspberry. (almacenarlos como variable de ambiente, en un .env)
 
@@ -199,5 +272,12 @@ https://www.weewx.com/docs/utilities.htm
 
 10.2514/6.2018-3856
 
-
 pi:climasUACJ
+
+
+
+
+
+## Bitacora accionable
+
+Idea para futuro: que un usuario pueda utilizar la interfaz gráfica para crear un "if X then do Y" y almacenarla ya sea como un paso extra en el script del driver de la estación meteorológica, o como código accionabvle (pasos)  en la base de datos. 
