@@ -17,12 +17,8 @@ class IPConnectionError(NetworkError):
 
 
 class GenericException(Exception):
-  action_path = None
-  action_name = None
-  action_args = None
-
-  def __init__(self, action_path, action_name, action_args):
+  def __init__(self, action_path, action_name, error_message):
     self.action_path = action_path
     self.action_name = action_name
-    self.action_args = action_args
-    Exception.__init__(self)
+    self.message = error_message
+    super.__init__(self.message)

@@ -13,16 +13,16 @@ DATABASES = {
       "database":  os.getenv("MYSQL_DATABASE"),
       "user":  os.getenv("MYSQL_USER"),
       "password": os.getenv("MYSQL_PASSWORD"),
-      "port": os.getenv("MYSQL_PORT", 3306),
-      "prefix": "",
-      "logging_queries": False,
+      "port": os.getenv("MYSQL_PORT", "3306"),
+      # "prefix": "",
+      # "logging_queries": False,
       "options": {
          #
       }
   },
   "sqlite": {
       "driver": "sqlite",
-      "database": os.getenv("SQLITE_DATABASE"),
+      "database": os.getenv("SQLITE_DATABASE", "meteoreo.db"),
       "logging_queries": False,
   }
 }

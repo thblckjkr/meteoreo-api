@@ -51,10 +51,16 @@ if args.scan:
       print("Scanning station %s" % station['name'])
 
       import lib.drivers.davis
-      status = lib.drivers.davis.DavisStation(
-          station['ip'], station['port'],
-          args.user, args.password)
-      status.get_services()
+      try:
+        status = lib.drivers.davis.DavisStation(
+            station['ip'], station['port'],
+            args.user, args.password)
+        status.connect()
+        status.get_services()
+      except Exception as e:
+        print("Error: %s" % e)
+      finally:
+        print("La estación %s está funcionando correctamente" % station['name'])
 
 # from .app/models/Station/Station import Station
 

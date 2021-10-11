@@ -9,7 +9,7 @@ Este documento a partir de este punto contiene mis ideas, y parte de las razones
 
 La idea es que esto sirva como un registro informal de lo que pasa por mio cabeza, para poder formalizarlo después en la redacción del documento final que acompañará este proyecto.
 
-## Identificación de requisitos
+## ~~Identificación~~ Análisis y especificación de requisitos
 
 ### Recabado de información del estado de las estaciones
 
@@ -31,6 +31,10 @@ Para la conexión a las estaciones RaspberryPi se considera lo siguiente:
 
 Por esta razón se optó por tener un servicio de monitoreo bidireccional. Se pretende que cambiando el ejecutor de servicios, se pueda obtener la información de la estación meteorológica sin necesidad de realizar diferentes implementaciones para cada caso. En este caso, se pretende que un script funcione en el mismo 
 
+> Indicar especificaciónes específicas para mi producto.
+>
+> Presentarlos en términos de requerimientos funcionales y no funcionales
+
 #### Consideraciones de seguridad
 
 Debido a que generalmente no se crea una red virtual privada separada para el manejo exclusivo de estaciones meteorológicas (ya que estas suelen instalarse sobre infraestructura existente) es importante tener consideraciones de seguridad respecto a el acceso a las estaciones, debido a que pueden ser un punto de acceso a una, otherwise, isolada y segura red.
@@ -51,9 +55,23 @@ TODO POR API.
 
 ## Diseño del sistema
 
-También
+> Presentar el modelo de módulo de flujo/secuencia/actividades.
+
+> La estructura del sistema (cliente/servidor) (Diagrama de clases) (Modelar la estructura de base de datos)
+
+## Programación del sistema de monitoreo
+
+> Construcción o desarrollo
 
 ### Casos principales para resolución
+
+## Las excepciones, son excepcionales
+
+Desviándonos de el sistema de manejo de excepciones propuesto para Java de Oracle [en el que se propone](https://docs.oracle.com/cd/A97339_01/doc/bc4j/BC4JRuntimeFiles/obcExceptions.htm) utilizar excepciones únicamente para . Por lo tanto, sólo capturo excepciones para procesos que impiden el correcto funcionamiento del sistema, evitando crear *excepciones irritantes* https://docs.microsoft.com/en-us/archive/blogs/ericlippert/vexing-exceptions.
+
+
+
+> Documentar lo necesrio para convencer que terminé el objetivo general
 
 **Conectividad de red**
 
@@ -212,7 +230,7 @@ Si bien es posible escalar horizontalmente la infraestructura, se busca evitarlo
 
 El diagrama de la base de datos,
 
-# Desarrollo del sistema de monitoreo
+### ~~Desarrollo del sistema de monitoreo~~
 
 ## Selección de un worker para correr los archivos
 
@@ -281,3 +299,8 @@ pi:climasUACJ
 ## Bitacora accionable
 
 Idea para futuro: que un usuario pueda utilizar la interfaz gráfica para crear un "if X then do Y" y almacenarla ya sea como un paso extra en el script del driver de la estación meteorológica, o como código accionabvle (pasos)  en la base de datos. 
+
+## Despliegue del sistema
+
+> Documentar proceso de deployment en prod
+

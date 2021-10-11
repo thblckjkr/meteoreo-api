@@ -3,7 +3,7 @@
 from masoniteorm.migrations import Migration
 
 
-class MigrationForStations(Migration):
+class Stations(Migration):
   def up(self):
     """
     Run the migrations.
@@ -13,6 +13,8 @@ class MigrationForStations(Migration):
       table.string("name").unique()
       table.unsigned("ip")
       table.unsigned("port")
+      table.string("username")
+      table.tiny_integer("has_key")
 
       # Define primary ID's
       table.primary('id')

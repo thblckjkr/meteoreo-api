@@ -19,7 +19,7 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
   def set_ip_attribute(self, attribute):
     return int(ipaddress.ip_address(attribute))
 
-  @has_many("uuid", "station_uuid")
+  # @has_many("uuid", "station_uuid")
   def events(self):
     from app.models.StationEvent import StationEvent
     return StationEvent

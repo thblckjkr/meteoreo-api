@@ -15,6 +15,7 @@
 	"magicstack.magicpython",
 	"gruntfuggly.todo-tree",
 	"ms-python.vscode-pylance",
-	"sleistner.vscode-fileutils"
+	"sleistner.vscode-fileutils",
+	"qwtel.sqlite-viewer"
 ]
 }

@@ -93,15 +93,45 @@ class DavisStation():
     self.hostname = hostname
     self.port = port
     self.username = username
-    self.password = password
-    self.connect()
 
   # Connnect to the station via the SSH executor
   def connect(self):
     factory = ExecutorFactory()
     factory.register(DRIVER_EXECUTOR)
     self.executor = factory.create_executor(
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, pem=self.pem)
+
+  def register(self, password):
+    if DRIVER_EXECUTOR != 'SSH':
+      return
+
+    factory = ExecutorFactory()
+    factory.register(DRIVER_EXECUTOR)
+    self.executor = factory.create_executor(
         DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=self.password)
+
+    # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+
+    # Creates a socket to check if the SSH port is accessible
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex((self.hostname, self.port))
+
+    if result != 0:
+      raise Exception("No se pudo conectar al puerto %s" % self.port)
+
+    # Creates the authorized_keys file
+    self.executor.run("mkdir -p ~/.ssh")
+    self.executor.run("touch ~/.ssh/authorized_keys")
+
+    # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+    with open("/app/private_key.pem.pub", "r") as f:
+      key = f.read()
+      self.executor.run("echo '%s' >> ~/.ssh/authorized_keys" % key)
+
+    # Restarts the SSH service
+    self.executor.run("systemctl reload sshd")
+    pass
+
 
   def get_status(self):
     """Get status of the station
