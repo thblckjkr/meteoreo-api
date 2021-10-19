@@ -14,7 +14,8 @@ class Stations(Migration):
       table.unsigned("ip")
       table.unsigned("port")
       table.string("username")
-      table.tiny_integer("has_key")
+      table.string("driver")
+      table.boolean("has_key").default( False )
 
       # Define primary ID's
       table.primary('id')
