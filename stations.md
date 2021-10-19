@@ -13,3 +13,10 @@ Creating a new private key to use to access the stations
 ```sh
 ssh-keygen -t rsa -m PEM -f /app/private_key.pem
 ```
+
+Creating the model of the stations and running the seeder to create a default group of stations
+
+```sh
+masonite-orm migrate
+masonite-orm seed:run Station
+```

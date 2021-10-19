@@ -12,13 +12,13 @@
 # @author: Teo Gonzalez Calzada [@thblckjkr]
 
 from ..Executor.ExecutorFactory import ExecutorFactory
-from ..exceptions.Generic import *
+from ..Exceptions.Generic import *
 import socket
 import os
 import subprocess
 import time
 
-DRIVER_NAME = 'RPiDavisStatus'
+# DRIVER_NAME = 'RPiDavisStatus'
 DRIVER_EXECUTOR = 'SSH'
 DEFAULT_SERVICES_MAP = {
     # Check the MySQL service
@@ -61,6 +61,7 @@ DEFAULT_SERVICES_MAP = {
             "stderr": None,  # None implica que esperamos que se encuentre vacío
 
             # Directiva de problemas que nos podemos encontrar, junto con sus respectivas acciones y soluciones
+            # "weewx.serialError.noConnection.action"
             "directive": [
                 {
                     "name": "Problema de conexión a la consola Davis por puerto serial",
@@ -86,20 +87,21 @@ DEFAULT_SERVICES_MAP = {
 }
 
 
-class DavisStation():
+class RpiDavisStation():
 
   def __init__(self, hostname, port, username, password, services_map=None):
     self.services_map = services_map or DEFAULT_SERVICES_MAP
     self.hostname = hostname
     self.port = port
     self.username = username
+    self.password = password
 
   # Connnect to the station via the SSH executor
   def connect(self):
     factory = ExecutorFactory()
     factory.register(DRIVER_EXECUTOR)
     self.executor = factory.create_executor(
-        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, pem=self.pem)
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=self.password)
 
   def register(self, password):
     if DRIVER_EXECUTOR != 'SSH':
