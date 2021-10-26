@@ -2,6 +2,12 @@ from fastapi import Depends, APIRouter
 
 from ..models.Station import Station
 from ..requests import StationRequest
+from ..lib.reporter import Bridge
+
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+import secrets
+
+security = HTTPBasic()
 
 router = APIRouter(
     prefix="/stations",
@@ -37,14 +43,24 @@ def put_station(stationRequest: StationRequest.Schema):
   """
   Create a station with all the information provided from the StationRequest.Schema
   """
-  #  Generate a XML according to the Schema http://cecatev.uacj.mx/Estaciones.xml after the request
+  # TODO: Generate a XML according to the Schema http://cecatev.uacj.mx/Estaciones.xml after the request
   station = Station()
 
   station.name = stationRequest.name
-  station.ip = stationRequest.ip
+  station.ip = stationRequest.ip_address
   station.port = stationRequest.port
+  station.username = stationRequest.username
 
-  station.save().fresh()
+  # Create a instance of the driver
+  # TODO: Store and use a different services map for each station
+  instance = Bridge.get_driver_instance(stationRequest)
+
+  # Get the available services according to the driver
+  station.services = instance.get_services()
+
+  # Use the instance of the driver to register the station
+  instance.register(stationRequest)
+
 
   return station.serialize()
 
@@ -53,6 +69,8 @@ def put_station(stationRequest: StationRequest.Schema):
 def delete_station(uuid: str):
   """
   Delete a station based on the station uuid
+
+  This actually *soft deletes* the station, to preserve the history of the station
   """
   station = Station.get(uuid)
   station.delete()

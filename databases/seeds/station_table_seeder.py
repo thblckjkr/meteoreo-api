@@ -17,6 +17,15 @@ class StationTableSeeder(Seeder):
     station.save()
 
     station = Station()
+    station.name = "Estación Rancho Reforma"
+    station.ip = "148.210.8.37"
+    station.port = 22
+    station.username = "pi"
+    station.driver = "davis.RpiDavisStation"
+    station.has_key = False
+    station.save()
+
+    station = Station()
     station.name = "Estación IIT"
     station.ip = "148.210.123.117"
     station.port = 22
@@ -31,5 +40,23 @@ class StationTableSeeder(Seeder):
     station.port = 22
     station.username = "pi"
     station.driver = "davis.RpiDavisStation"
+    station.has_key = False
+    station.save()
+
+    station = Station()
+    station.name = "Estación Campbell"
+    station.ip = "148.210.8.33"
+    station.port = 22
+    station.username = "pi"
+    station.driver = "davis.driverNoExiste"
+    station.has_key = False
+    station.save()
+
+    station = Station()
+    station.name = "Estación Campbell 2"
+    station.ip = "148.210.8.2"
+    station.port = 22
+    station.username = "pi"
+    station.driver = "campbell.driverNoExiste"
     station.has_key = False
     station.save()

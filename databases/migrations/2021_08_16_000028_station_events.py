@@ -14,8 +14,10 @@ class StationEvents(Migration):
       table.string(column="event_type")
       table.string(column="event_path")
       table.string(column="event_data")
+      table.string(column="event_status")
 
       table.primary("id")
+
       #! Soft deletes are needed for auditing.
       table.soft_deletes()
       table.timestamps()

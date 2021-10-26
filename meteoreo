@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
-import argparse
+import sys
 import logging
+import argparse
 import config.sentry  # Automatic sentry error reporting and logging
-from lib.services import Reporter  # Main logic class
+from lib.reporter import Reporter  # Main logic class
 
 parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
 
 parser.add_argument(
     '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', action='store_true')
 parser.add_argument(
-    '--report', '-r',  help='Report via CLI the status of a given station', type=str, default=None)
+    '--report', '-r', help='Report via CLI the status of a given station', type=str, default=None)
 parser.add_argument(
     '--user', '-u', help='(optional) User to connect to the station', type=str, default=None)
 parser.add_argument(
@@ -24,54 +25,14 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-
-# stations = [
-#     {
-#         'name': 'Estación Babícora',
-#         'ip': '148.210.8.32',
-#         'port': 22,
-#     },
-#     {
-#         'name': 'Estación IIT',
-#         'ip': '148.210.123.117',
-#         'port': 22,
-#     },
-#     {
-#         'name': 'Estación Anapra',
-#         'ip': '148.210.8.31',
-#         'port': 22,
-#     },
-# ]
-
-# if args.scan:
-#   if args.station:
-#     print("Scanning station %s" % args.station)
-#     stations = []
-#   else:
-#     print("Scanning all stations")
-#     for station in stations:
-#       print("Scanning station %s" % station['name'])
-
-#       import lib.drivers.davis
-#       try:
-#         status = lib.drivers.davis.RpiDavisStation(
-#             station['ip'], station['port'],
-#             args.user, args.password)
-#         status.connect()
-#         status.get_services()
-#       except Exception as e:
-#         print("Error: %s" % e)
-#       finally:
-#         print("La estación %s está funcionando correctamente" % station['name'])
-
-# Define the global logging configuration. If the verbose flag is set, the logging level will output everything to stdout
-logFormatter = logging.Formatter(
-  "%(asctime)s %(module)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-8s [%(process)d] %(message)s"
+# Define the global logging configuration.
+# If the verbose flag is set, the logging level will output everything to stdout
+formatter = logging.Formatter(
+    "%(asctime)s %(module)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-8s [%(process)d] %(message)s"
     # "%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s"
 )
 
 logging.basicConfig(
-    format=logFormatter,
     level=logging.WARNING if not args.verbose else logging.INFO if args.debug else logging.DEBUG
 )
 
@@ -79,17 +40,17 @@ rootLogger = logging.getLogger()
 
 # TODO: Make the folder location configurable
 fileHandler = logging.FileHandler("{0}/{1}.log".format("logs/", "meteoreo"))
-fileHandler.setFormatter(logFormatter)
+fileHandler.setFormatter(formatter)
 rootLogger.addHandler(fileHandler)
 
 consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
+consoleHandler.setFormatter(formatter)
 rootLogger.addHandler(consoleHandler)
 
 # Show argparse help if no arguments are provided
 if not args.scan and not args.report:
   parser.print_help()
-  exit(1)
+  sys.exit(1)
 
 if args.scan:
   r = Reporter()
@@ -107,11 +68,3 @@ if args.report:
     print("Error: %s" % e)
   finally:
     print("La estación %s está funcionando correctamente" % args.report)
-
-# from .app/models/Station/Station import Station
-
-# stations = Station.all()
-
-# # Loop through all stations
-# for station in stations:
-#     print(f'Escaneando estacion %s \n' % station.name)

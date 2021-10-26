@@ -16,6 +16,7 @@ class Stations(Migration):
       table.string("username")
       table.string("driver")
       table.boolean("has_key").default( False )
+      table.json(column="services", nullable=True)
 
       # Define primary ID's
       table.primary('id')

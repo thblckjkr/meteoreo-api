@@ -11,6 +11,9 @@
 #
 # @author: Teo Gonzalez Calzada [@thblckjkr]
 
+from pydantic import BaseModel
+from fastapi import Query
+
 from ..Executor.ExecutorFactory import ExecutorFactory
 from ..Exceptions.Generic import *
 import socket
@@ -18,8 +21,12 @@ import os
 import subprocess
 import time
 
-# DRIVER_NAME = 'RPiDavisStatus'
+# Ejecutor por defecto
 DRIVER_EXECUTOR = 'SSH'
+
+# List of available drivers for this module (IMPORtANT)
+DRIVERS_LIST = ['RpiDavisStation']
+
 DEFAULT_SERVICES_MAP = {
     # Check the MySQL service
     "mysql": {
@@ -32,95 +39,97 @@ DEFAULT_SERVICES_MAP = {
 
     # Checks the time (station time is important)
     "time": {
-      "command": "date '+%s'",
-      "expects": {
-        # Hack to get the time near +- 16 minutes of when the time was asked
-        "stdout": str( int( int( time.time() ) / 1000 ) ),
-        "stderr": None,
-        "directive": [
-          {
-            "name": "Por alguna extraña razón el comando date '+%\s' dió error",
-            "stderr": "",
-            "action": "No hay nada que hacer"
-          }
-        ]
-      }
+        "command": "date '+%s'",
+        "expects": {
+            # Hack to get the time near +- 16 minutes of when the time was asked
+            "stdout": str(int(int(time.time()) / 1000)),
+            "stderr": None,
+            "directive": [
+                {
+                    "name": "Por alguna extraña razón el comando date '+%\s' dió error",
+                    "stderr": "",
+                    "action": "No hay nada que hacer"
+                }
+            ]
+        }
     },
 
     # for i in $(seq 30 50); do nc -v -n -z -w 1 148.210.8.$i 22; done
-    ""
 
     # Check the WeeWX service
     "weewx": {
         # Este es el comando que ejecutamos para obtener los datos del servicio
         "command": "systemctl status weewx",
+        "stdout": "Active: active (running)",
+        "stderr": None,  # None implica que esperamos que se encuentre vacío
 
         # Y esto es lo que esperamos, en out o err, según sea el caso
-        "expects": {
-            "stdout": "Active: active (running)",
-            "stderr": None,  # None implica que esperamos que se encuentre vacío
 
-            # Directiva de problemas que nos podemos encontrar, junto con sus respectivas acciones y soluciones
-            # "weewx.serialError.noConnection.action"
-            "directive": [
-                {
-                    "name": "Problema de conexión a la consola Davis por puerto serial",
-                    "expects": {
-                        "stdout": "vantage: Unable to wake up console",
-                        "action": "sudo wee_device --clear-memory && sudo wee_device --info",
-
-                        "directive": [
-                            # There is no connection to clear the memory of the station
-                            {
-                                "name": "No tenemos conexión para limpiar la memoria de la estación",
-                                "expects": {
-                                    "stdout": "OSError: [Errno 11] Resource temporarily unavailable",
-                                    "action": "sudo systemctl stop serial-getty@ttyS0.service"
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
+        # Directiva de problemas que nos podemos encontrar, junto con sus respectivas acciones y soluciones
+        # "weewx.serialError.noConnection.action"
+        "actions": [
+            {"unable_to_wake": {
+                "description": "Problema de conexión a la consola Davis por puerto serial",
+                "solution": "Reinicia la memoria de la consola Davis por medio de la opción --clear-memory",
+                "stdout": "vantage: Unable to wake up console",
+                "action": "sudo wee_device --clear-memory && sudo wee_device --info",
+                "actions": [
+                    # There is no connection to clear the memory of the station
+                    {"bad_serial": {
+                        "description": "No tenemos conexión para limpiar la memoria de la estación",
+                        "solution": "Restart serial connection",
+                        "stdout": "OSError: [Errno 11] Resource temporarily unavailable",
+                        "action": "sudo systemctl stop serial-getty@ttyS0.service"
+                    }}
+                ]
+            }}
+        ]
     }
 }
 
 
 class RpiDavisStation():
 
-  def __init__(self, hostname, port, username, password, services_map=None):
+  def __init__(self, station, services_map=None):
     self.services_map = services_map or DEFAULT_SERVICES_MAP
-    self.hostname = hostname
-    self.port = port
-    self.username = username
-    self.password = password
+    self.hostname = station.ip_address
+    self.port = station.port
+    self.username = station.username
+
+    if station.password:
+      self.password = station.password
+
+    if station.has_key:
+      self.registered = station.has_key
+
+  # Gets the services available to search in the station
+  def get_services(self):
+    return serl.services_map.keys()
 
   # Connnect to the station via the SSH executor
   def connect(self):
+    # Checks if the station has the key registered, if not, register the key
+    if not self.registered and DRIVER_EXECUTOR == 'SSH':
+      self.register(self.password)
+
     factory = ExecutorFactory()
     factory.register(DRIVER_EXECUTOR)
     self.executor = factory.create_executor(
-        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=self.password)
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username)
 
-  def register(self, password):
+  def register(self, data):
+    password = data.password
     if DRIVER_EXECUTOR != 'SSH':
       return
 
     factory = ExecutorFactory()
     factory.register(DRIVER_EXECUTOR)
     self.executor = factory.create_executor(
-        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=self.password)
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=password)
 
     # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
 
-    # Creates a socket to check if the SSH port is accessible
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex((self.hostname, self.port))
-
-    if result != 0:
-      raise Exception("No se pudo conectar al puerto %s" % self.port)
-
+    # Assumes get_status was previously called and the station is available
     # Creates the authorized_keys file
     self.executor.run("mkdir -p ~/.ssh")
     self.executor.run("touch ~/.ssh/authorized_keys")
@@ -133,7 +142,6 @@ class RpiDavisStation():
     # Restarts the SSH service
     self.executor.run("systemctl reload sshd")
     pass
-
 
   def get_status(self):
     """Get status of the station
@@ -185,12 +193,13 @@ class RpiDavisStation():
       # TODO: Recursion
       [stdout, stderr] = self.executor.run(operations['command'])
 
-      if (operations['expects']['stdout'] == None and len(stdout) == 0) or operations['expects']['stdout'] in stdout:
-        if (operations['expects']['stderr'] == None and len(stderr) == 0) or operations['expects']['stderr'] in stderr:
+      if (operations['stdout'] == None and len(stdout) == 0) or operations['stdout'] in stdout:
+        if (operations['stderr'] == None and len(stderr) == 0) or operations['stderr'] in stderr:
           pass
       else:
         # TODO: Return a better exception, more useful
-        raise Exception("Obtenido %s\n Esperado %s" % (stdout, operations['expects']['stdout']))
+        raise Exception("Obtenido %s\n Esperado %s" %
+                        (stdout, operations['stdout']))
 
     return True
 

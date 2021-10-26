@@ -16,7 +16,7 @@ class Schema(BaseModel):
   IP validated with a regex
   See: https://stackoverflow.com/a/17871737
   """
-  ip: str = Query(
+  ip_address: str = Query(
       None,
       title="Query string",
       description="Query string for the items to search in the database that have a good match",

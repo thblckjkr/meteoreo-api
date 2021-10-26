@@ -2,11 +2,21 @@ import os
 
 from fastapi import FastAPI
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import stations
+from app.routers import drivers
 
 # Load environment variables (from .env) and add them to the os.getenv() function
 load_dotenv()
+
+# Define valid origin for CORS
+origins = [
+    "http://127.0.0.1:8080",
+    "https://cecatev.uacj.mx",
+    "http://cecatev.uacj.mx",
+    "http://localhost:8080",
+]
 
 DESCRIPTION = """
 Meteoreo API
@@ -17,20 +27,30 @@ Meteoreo es un sistema de monitoreo y control orientado a estaciones meteorológ
 """
 
 app = FastAPI(
-   title="Meteoreo API",
-   description=DESCRIPTION,
-   version=os.getenv("VERSION"),
-   contact={
-       "name": "Teo González Calzada",
-       "url": "https://thblckjkr.tk",
-       "email": "teo@thblckjkr.tk"
-   },
-   license_info={
-       "name": "GNU v3",
-       "url": "https://www.gnu.org/licenses/gpl-3.0.html"
-   },
-   docs_url="/docs_legacy",
-   redoc_url="/docs"
+    title="Meteoreo API",
+    description=DESCRIPTION,
+    version=os.getenv("VERSION"),
+    contact={
+        "name": "Teo González Calzada",
+        "url": "https://thblckjkr.tk",
+        "email": "teo@thblckjkr.tk"
+    },
+    license_info={
+        "name": "GNU v3",
+        "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+    },
+    docs_url="/docs_legacy",
+    redoc_url="/api/v1/docs",
 )
 
-app.include_router(stations.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+app.include_router(stations.router, prefix="/api/v1")
+app.include_router(drivers.router, prefix="/api/v1")
