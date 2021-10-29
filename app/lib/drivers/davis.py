@@ -92,7 +92,7 @@ class RpiDavisStation():
 
   def __init__(self, station, services_map=None):
     self.services_map = services_map or DEFAULT_SERVICES_MAP
-    self.hostname = station.ip_address
+    self.hostname = station.ip
     self.port = station.port
     self.username = station.username
 
@@ -103,14 +103,15 @@ class RpiDavisStation():
       self.registered = station.has_key
 
   # Gets the services available to search in the station
-  def get_services(self):
-    return serl.services_map.keys()
+  def get_services_list(self):
+    dictionary = self.services_map.keys()
+    return list(dictionary)
 
   # Connnect to the station via the SSH executor
   def connect(self):
-    # Checks if the station has the key registered, if not, register the key
-    if not self.registered and DRIVER_EXECUTOR == 'SSH':
-      self.register(self.password)
+    # # Checks if the station has the key registered, if not, register the key
+    # if not self.registered and DRIVER_EXECUTOR == 'SSH':
+    #   self.register(self.password)
 
     factory = ExecutorFactory()
     factory.register(DRIVER_EXECUTOR)
@@ -129,19 +130,39 @@ class RpiDavisStation():
 
     # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
 
+    # Enables writing to the station via remountrw (because the file system is read-only)
+    # Check ReadOnlyRoot Pi (https://github.com/glennmckechnie/rorpi-raspberrypi) for more info
+    [stdout, stderr] = self.executor.run('sudo remountrw')
+    if stderr != '':
+      raise Exception("Error enabling read-write mode")
+
     # Assumes get_status was previously called and the station is available
     # Creates the authorized_keys file
     self.executor.run("mkdir -p ~/.ssh")
-    self.executor.run("touch ~/.ssh/authorized_keys")
+    [stdout, stderr] = self.executor.run("touch ~/.ssh/authorized_keys")
+    if(stderr != ""):
+      raise Exception("Error touching authorized_keys file: %s" % stderr)
 
     # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
     with open("/app/private_key.pem.pub", "r") as f:
       key = f.read()
-      self.executor.run("echo '%s' >> ~/.ssh/authorized_keys" % key)
+      [stdout, stderr] = self.executor.run("echo '%s' >> ~/.ssh/authorized_keys" % key)
+      if(stderr != ""):
+        raise Exception("Error adding key to authorized_keys file")
 
     # Restarts the SSH service
-    self.executor.run("systemctl reload sshd")
-    pass
+    [stdout, stderr] = self.executor.run("sudo systemctl reload sshd")
+    if stderr != "":
+      raise Exception("Error reloading SSH daemon")
+
+    [stdout, stderr] = self.executor.run('sudo remountro')
+    if stderr != "":
+      raise Exception("Error disabling read-only mode")
+
+    # Checks if the station has the key registered, if not, register the key
+    self.registered = True
+
+    return True
 
   def get_status(self):
     """Get status of the station

@@ -8,6 +8,7 @@ import logging
 
 from app.models.Station import Station
 from .Exceptions.Generic import NetworkError
+from .drivers.davis import RpiDavisStation
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,23 @@ logger = logging.getLogger(__name__)
 class Bridge:
   """ Acts as a bridge between the databases and the drivers
   """
+  def driver_exists(driver):
+    """Checks if a driver exists
+
+    Args:
+        driver (str): Driver name
+
+    Returns:
+        bool: True if the driver exists, False otherwise
+    """
+    if driver is None:
+      return False
+
+    if driver in Bridge.get_drivers():
+      return True
+    else:
+      return False
+
   def get_drivers():
     """Gets all the drivers available in the drivers folder
 
@@ -61,7 +79,7 @@ class Bridge:
       # Loads the driver from the station.drvier parameter.
       # Assumes that the driver specification is in the form of "module.class"
       module = importlib.import_module(
-          "lib.drivers." + station.driver.split(".")[0])
+          "." + station.driver.split(".")[0], package="app.lib.drivers")
       driver = getattr(module, station.driver.split(".")[1])
       instance = driver(station)
     except ModuleNotFoundError as e:
