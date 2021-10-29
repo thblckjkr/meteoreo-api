@@ -1,4 +1,5 @@
 version: '3.3'
+
 services:
   api:
     container_name: meteoreo-api
@@ -15,23 +16,23 @@ services:
       - PRE_START_PATH=/app/app/prestart.sh
       - GUNICORN_CMD_ARGS="--reload"
     ports:
-      - '81:80'
+      - "81:80"
     networks:
       - meteoreo-backend
-  mysql:
-    image: mysql
-    container_name: meteoreo-mysql
+
+  postgres:
+    image: postgres
+    container_name: meteoreo-postgres
+    restart: always
     environment:
-      MYSQL_DATABASE: '${MYSQL_DATABASE}'
-      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
-      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
-      MYSQL_USER: '${MYSQL_USER}'
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - '3306:3306'
+      - "5432:5432"
     networks:
       - meteoreo-backend
+
 networks:
   meteoreo-backend:
     driver: bridge

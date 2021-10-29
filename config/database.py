@@ -8,17 +8,28 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DATABASES = {
-    "default": "mysql",
+    "default": os.getenv("DB_CONN", "mysql"),
+
     "mysql": {
-        "host": os.getenv("MYSQL_HOST", "mysql"),
         "driver": "mysql",
+        "host": os.getenv("MYSQL_HOST", "mysql"),
+        "port": os.getenv("MYSQL_PORT", "3306"),
         "database":  os.getenv("MYSQL_DATABASE"),
         "user":  os.getenv("MYSQL_USER"),
         "password": os.getenv("MYSQL_PASSWORD"),
-        "port": os.getenv("MYSQL_PORT", "3306"),
-        # "prefix": "",
         "logging_queries": True,
     },
+
+    "postgres": {
+        "driver": "postgresql",
+        "host": os.getenv("POSTGRES_HOST", "postgres"),
+        "port": os.getenv("POSTGRES_PORT", "5432"),
+        "database": os.getenv("POSTGRES_DATABASE"),
+        "user":  os.getenv("POSTGRES_USER"),
+        "password": os.getenv("POSTGRES_PASSWORD"),
+        "logging_queries": True,
+    },
+
     "sqlite": {
         "driver": "sqlite",
         "database": os.getenv("SQLITE_DATABASE", "meteoreo.db"),
