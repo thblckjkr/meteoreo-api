@@ -8,3 +8,5 @@ class StationEvent(Model, SoftDeletesMixin):
   This is the model to store the events from the stations, such as
   when the station goes offline or has a problem, etc.
   """
+
+  __hidden__ = ['deleted_at']

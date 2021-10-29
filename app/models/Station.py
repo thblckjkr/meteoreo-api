@@ -11,7 +11,6 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
   # Station model configuration
   __uuid_version__ = 4
   __appends__ = ["ip_address"]
-  # __with__ = ["events"]
 
   __hidden__ = ["created_at", "updated_at", "deleted_at"]
 

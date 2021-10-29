@@ -5,10 +5,11 @@
 import os
 import importlib
 import logging
+import datetime
 
 from app.models.Station import Station
+from app.models.StationEvent import StationEvent
 from .Exceptions.Generic import NetworkError
-from .drivers.davis import RpiDavisStation
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +94,7 @@ class Bridge:
 
 
 
-class Reporter:
+class Reporter():
   def __init__(self):
     """Constructor for the reporter
 
@@ -124,11 +125,10 @@ class Reporter:
 
     """
     try:
-      instance = self.get_driver_instance(station)
+      instance = Bridge.get_driver_instance(station)
     except Exception as e:
       logger.error("Error loading driver: %s", str(e))
       raise e
-
     # Connects to the station, checks the status and generates an event if neccessary
     try:
       instance.connect()
@@ -136,13 +136,23 @@ class Reporter:
     except NetworkError as e:
       logger.warning(
           "There was a connection error to the station %s", station.name)
-      return
+      event = StationEvent()
+      # TODO: Check if the event already exists
+      event.create({
+        "station_id": station.id,
+        "event_type": "network_error",
+        "event_path": station.name,
+        "event_data": "",
+        "event_status": "Pending"
+      })
     except Exception as e:
       logger.error(
           "There was an error while getting the status of the station %s: %s", station.name, str(e))
       return
 
-    print(status)
+    station.last_scan = datetime.datetime.now()
+    station.save()
+
     # If the status is different from the last status, generate an event
     # if status != station.last_status:
     #   station.last_status = status

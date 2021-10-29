@@ -4,7 +4,7 @@ import sys
 import logging
 import argparse
 import config.sentry  # Automatic sentry error reporting and logging
-from lib.reporter import Reporter  # Main logic class
+from app.lib.reporter import Reporter  # Main logic class
 
 parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
 

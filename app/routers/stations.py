@@ -30,7 +30,7 @@ def read_stations():
   stations = Station.all()
 
   for station in stations:
-    station.incidents = station.events.all()
+    station.incidents = station.events.serialize()
 
   return {
     "stations": stations.serialize()
@@ -87,7 +87,10 @@ async def put_station(station: StationRequest.Schema):
   except:
     raise HTTPException(status_code=500, detail="Unable to save the station")
 
-  return { "status": "ok", "model":stationModel.serialize() }
+  return {
+    "status": "Ok",
+    "model":stationModel.serialize()
+  }
 
 @router.delete("/{uuid}")
 def delete_station(uuid: str):

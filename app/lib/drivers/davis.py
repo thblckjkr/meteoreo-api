@@ -92,11 +92,12 @@ class RpiDavisStation():
 
   def __init__(self, station, services_map=None):
     self.services_map = services_map or DEFAULT_SERVICES_MAP
-    self.hostname = station.ip
+    self.hostname = station.ip_address
     self.port = station.port
     self.username = station.username
 
-    if station.password:
+    # If the station has the password attribute, we store in itself
+    if hasattr(station, 'password'):
       self.password = station.password
 
     if station.has_key:
