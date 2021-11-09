@@ -64,7 +64,8 @@ class RemoteExecutor(ExecutorBase):
     self._port = kwargs.get('port', 22)
     self._username = kwargs.get('username', None)
     self._password = kwargs.get('password', None)
-    self._pem = kwargs.get('pem', None)
+    # TODO! Make this private key a global or environment variable
+    self._pem = kwargs.get('pem', 'private_key.pem')
 
   def run(self, command: str) -> (str, str):
     """ Runs the command using paramiko """
