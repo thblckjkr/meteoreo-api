@@ -11,10 +11,10 @@ class StationEvents(Migration):
     with self.schema.create("station_events") as table:
       table.increments("id")
       table.uuid("station_id")
-      table.string(column="event_type")
-      table.string(column="event_path")
-      table.string(column="event_data")
-      table.string(column="event_status")
+      table.string(column="type", length=16, nullable=False)
+      table.string(column="path")
+      table.json(column="data")
+      table.string(column="status")
 
       table.primary("id")
 

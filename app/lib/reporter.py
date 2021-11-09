@@ -37,6 +37,12 @@ class Bridge:
   def get_drivers():
     """Gets all the drivers available in the drivers folder
 
+    This function puts a strain on the IO of the system, as it scans all the drivers
+    to create a list and return it.
+
+    It should be used only on registration of a station rather than on every scan.
+    It's cheaper to try to load the driver and throw an exception than running this function
+
     Returns:
         list: List of all the drivers
     """
@@ -93,8 +99,7 @@ class Bridge:
     return instance
 
 
-
-class Reporter():
+class Reporter:
   def __init__(self):
     """Constructor for the reporter
 
@@ -111,7 +116,8 @@ class Reporter():
     print("Running routine for reporter")
     for station in stations:
       print("Checking station: " + station.name)
-      self.get_station_status(station)
+      reporter = StationReporter(station)
+      reporter.generate_station_status()
 
   def get_stations(self):
     """Get a list of the available stations
@@ -120,44 +126,90 @@ class Reporter():
     """
     return Station.get()
 
-  def get_station_status(self, station):
-    """Load the driver and get the status of the station, generates an event if neccessary.
 
+class StationReporter:
+
+  def __init__(self, station):
+    """Constructor for the station reporter
+
+      This method handles the generation of reports of the station
+      Also keeps in mind the idea of parallelization in the future.
+    """
+    self.station = station
+    try:
+      self.driver = Bridge.get_driver_instance(station)
+    except Exception as e:
+      # This error would only be triggered if the driver is erased or the class is renamed
+      # This is not a problem, so we just log it and move on
+      logger.error("Error loading driver: %s", str(e))
+      self.generate_event("driver_error")
+
+  def generate_station_status(self):
+    """Loads the driver and get the status of the station, generates an event if neccessary.
+
+    Connects to the station via driver, checks the status and generates an event if neccessary
     """
     try:
-      instance = Bridge.get_driver_instance(station)
-    except Exception as e:
-      logger.error("Error loading driver: %s", str(e))
-      raise e
-    # Connects to the station, checks the status and generates an event if neccessary
-    try:
-      instance.connect()
-      status = instance.get_status()
+      self.driver.connect()
+      problems = self.driver.scan()
+
     except NetworkError as e:
       logger.warning(
-          "There was a connection error to the station %s", station.name)
-      event = StationEvent()
-      # TODO: Check if the event already exists
-      event.create({
-        "station_id": station.id,
-        "event_type": "network_error",
-        "event_path": station.name,
-        "event_data": "",
-        "event_status": "Pending"
-      })
+          "There was a connection error to the station %s", self.station.name)
+      self.generate_event("network_error")
+      return  # If the network is down, we can't get the status, so we just return and end the function
+
     except Exception as e:
+      # Fatal error that isn't a network error
       logger.error(
-          "There was an error while getting the status of the station %s: %s", station.name, str(e))
+          "There was an error while getting the status of the station %s: %s", self.station.name, str(e))
+      self.generate_event(e)
       return
 
-    station.last_scan = datetime.datetime.now()
-    station.save()
+    self.station.last_scan = datetime.datetime.now()
+    self.station.save()
 
-    # If the status is different from the last status, generate an event
-    # if status != station.last_status:
-    #   station.last_status = status
-    #   station.save()
-    #   self.generate_event(station, status)
+    # Check the contents of status, to see if there were any errors, and send the errors to the generator
+    if problems is not None:
+      for problem in problems:
+        self.generate_event("service_error", problem)
 
-    logger.warning('The station %s using the driver %s was working correctly',
-                   station.name, station.driver)
+    logger.warning('The station %s using the driver %s was correctly scanned',
+                   self.station.name, self.station.driver)
+
+  def generate_event(self, error, data = None):
+    """ Generates an event for the station
+
+    This method is called when the status of the station changes.
+
+    It first checks if the event already exists, if it does, it updates it, if not, it creates a new one.
+    If the event is a network error, but the last scan time of the station is less than ALERT_TIME
+    it updates the event.
+    """
+    if data is None:
+      data = {
+        path: None,
+      }
+
+    logger.warning("Generating event for station %s", self.station.name)
+
+    # Check if there is an event of the same error type and in the same path
+    lastEvent = StationEvent.where({
+        "type": error,
+        "path": data['path'],
+        "station_id": self.station.id
+    }).get()
+
+    if lastEvent.is_empty():
+      # If there is no event, create a new one
+      event = StationEvent()
+
+      event.station_id=self.station.id
+      event.type=error
+      event.path=data['path']
+      event.data=data
+      event.status="pending"
+      event.save()
+    else:
+      # If there is an event, update the last reported time
+      lastEvent.first().touch()

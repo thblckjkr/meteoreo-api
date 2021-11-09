@@ -10,3 +10,5 @@ class StationEvent(Model, SoftDeletesMixin):
   """
 
   __hidden__ = ['deleted_at']
+
+  __casts__ = { "data": "json" }

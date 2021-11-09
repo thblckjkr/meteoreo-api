@@ -66,7 +66,7 @@ async def put_station(station: StationRequest.Schema):
   instance = Bridge.get_driver_instance(station)
 
   # # Get the available services according to the driver
-  stationModel.services = instance.get_services_list()
+  stationModel.services = instance.get_services()
 
   # Tries to get the status of the station (if it is online)
   try:

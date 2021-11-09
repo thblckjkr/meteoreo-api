@@ -28,33 +28,29 @@ DRIVER_EXECUTOR = 'SSH'
 DRIVERS_LIST = ['RpiDavisStation']
 
 DEFAULT_SERVICES_MAP = {
+
     # Check the MySQL service
     "mysql": {
         "command": "systemctl status mysql",
-        "expects": {
-            "stdout": "Active: active (running) since",
-            "stderr": None
-        }
+        "stdout": "Active: active (running) since",
+        "stderr": None
     },
 
     # Checks the time (station time is important)
     "time": {
         "command": "date '+%s'",
-        "expects": {
-            # Hack to get the time near +- 16 minutes of when the time was asked
-            "stdout": str(int(int(time.time()) / 1000)),
-            "stderr": None,
-            "directive": [
-                {
-                    "name": "Por alguna extraña razón el comando date '+%\s' dió error",
-                    "stderr": "",
-                    "action": "No hay nada que hacer"
-                }
-            ]
+        # Hack to get the time near +- 16 minutes of when the time was asked
+        "stdout": str(int(int(time.time()) / 1000)),
+        "stderr": None,
+
+        "actions": {
+            "bad_time": {
+                "name": "Por alguna extraña razón el comando date '+%\s' dió error",
+                "response_stderr": "",
+                "action": "No hay nada que hacer"
+            }
         }
     },
-
-    # for i in $(seq 30 50); do nc -v -n -z -w 1 148.210.8.$i 22; done
 
     # Check the WeeWX service
     "weewx": {
@@ -67,23 +63,23 @@ DEFAULT_SERVICES_MAP = {
 
         # Directiva de problemas que nos podemos encontrar, junto con sus respectivas acciones y soluciones
         # "weewx.serialError.noConnection.action"
-        "actions": [
-            {"unable_to_wake": {
+        "actions": {
+            "unable_to_wake": {
                 "description": "Problema de conexión a la consola Davis por puerto serial",
                 "solution": "Reinicia la memoria de la consola Davis por medio de la opción --clear-memory",
-                "stdout": "vantage: Unable to wake up console",
-                "action": "sudo wee_device --clear-memory && sudo wee_device --info",
-                "actions": [
+                "response_stdout": "vantage: Unable to wake up console",
+                "command": "sudo wee_device --clear-memory && sudo wee_device --info",
+                "actions": {
                     # There is no connection to clear the memory of the station
-                    {"bad_serial": {
+                    "bad_serial": {
                         "description": "No tenemos conexión para limpiar la memoria de la estación",
                         "solution": "Restart serial connection",
-                        "stdout": "OSError: [Errno 11] Resource temporarily unavailable",
-                        "action": "sudo systemctl stop serial-getty@ttyS0.service"
-                    }}
-                ]
-            }}
-        ]
+                        "response_stdout": "OSError: [Errno 11] Resource temporarily unavailable",
+                        "command": "sudo systemctl stop serial-getty@ttyS0.service"
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -104,7 +100,7 @@ class RpiDavisStation():
       self.registered = station.has_key
 
   # Gets the services available to search in the station
-  def get_services_list(self):
+  def get_services(self):
     dictionary = self.services_map.keys()
     return list(dictionary)
 
@@ -147,7 +143,8 @@ class RpiDavisStation():
     # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
     with open("/app/private_key.pem.pub", "r") as f:
       key = f.read()
-      [stdout, stderr] = self.executor.run("echo '%s' >> ~/.ssh/authorized_keys" % key)
+      [stdout, stderr] = self.executor.run(
+          "echo '%s' >> ~/.ssh/authorized_keys" % key)
       if(stderr != ""):
         raise Exception("Error adding key to authorized_keys file")
 
@@ -203,30 +200,47 @@ class RpiDavisStation():
     # By default, the station is not available
     return False
 
-  def get_services(self):
+  def scan(self):
+    """Scans the station and gets the status of the services available on the station
+
+    Returns:
+        dict: A dictionary with the problems, or None if everything is ok
+    """
+
+    # Initialize an empty array to store the services problems
+    problems = []
+
     # Gets the status first
 
     if not self.get_status():
       # Somehow, the station is not available but didn't raise an exception
-      return None
+      raise NetworkError("The station is not available")
 
-    # Runs the services check
+    # Runs the services check, we need to just recurse the first level
+    # This can be changed to a recursive function.
     for service, operations in self.services_map.items():
-      # TODO: Recursion
       [stdout, stderr] = self.executor.run(operations['command'])
 
       if (operations['stdout'] == None and len(stdout) == 0) or operations['stdout'] in stdout:
         if (operations['stderr'] == None and len(stderr) == 0) or operations['stderr'] in stderr:
           pass
       else:
-        # TODO: Return a better exception, more useful
-        raise Exception("Obtenido %s\n Esperado %s" %
-                        (stdout, operations['stdout']))
+        # Checks for the current stdout on the actions dictionary
+        for name, action in  operations['actions'].items():
+          if (action['response_stdout'] == None and len(stdout) == 0) or action['response_stdout'] in stdout:
+            if (action['response_stderr'] == None and len(stderr) == 0) or action['response_stderr'] in stderr:
+              # If it matches, it means that we have a action to do
+              status = {
+                  'service': service,
+                  'action': name,
+                  'stdout': stdout,
+                  'stderr': stderr,
+                  'description': action['description'],
+                  'solution': action['solution'],
+                  'path': f'%s.actions.%s' % (service, name)
 
-    return True
+              }
 
-    pass
+        problems.append(status)
 
-  def fix_service(self):
-
-    pass
+    return None if len(problems) == 0 else problems
