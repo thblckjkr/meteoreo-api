@@ -1,11 +1,12 @@
 from fastapi import Depends, APIRouter, HTTPException
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+import secrets
+
+from uuid import UUID
 
 from ..models.Station import Station
 from ..requests import StationRequest
 from ..lib.reporter import Bridge
-
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-import secrets
 
 security = HTTPBasic()
 
@@ -30,7 +31,7 @@ def read_stations():
   stations = Station.all()
 
   for station in stations:
-    station.incidents = station.events.serialize()
+    station.incidents = station.events.where("status", "!=", "resolved").serialize()
 
   return {
     "stations": stations.serialize()
@@ -39,7 +40,15 @@ def read_stations():
 # -------------------------
 # Single station operations
 # -------------------------
+@router.get("/{uuid}")
+def get_station(uuid: str):
+  """
+  Get a specific station from it's uuid
+  """
+  result = Station.find(uuid)
+  result.incidents = result.events.serialize()
 
+  return result.serialize()
 
 @router.put("/")
 async def put_station(station: StationRequest.Schema):
@@ -93,7 +102,7 @@ async def put_station(station: StationRequest.Schema):
   }
 
 @router.delete("/{uuid}")
-def delete_station(uuid: str):
+def delete_station(uuid: UUID):
   """
   Delete a station based on the station uuid
 
@@ -102,17 +111,6 @@ def delete_station(uuid: str):
   station = Station.get(uuid)
   station.delete()
   return {"message": "station deleted"}
-
-
-@router.get("/{uuid}")
-def get_station(uuid: str):
-  """
-  Get a specific station from it's uuid
-  """
-  result = Station.find(uuid)
-  result.incidents = result.events.all()
-
-  return result.serialize()
 
 
 @router.post("/{uuid}")

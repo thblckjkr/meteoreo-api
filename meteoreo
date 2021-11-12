@@ -13,6 +13,8 @@ parser.add_argument(
 parser.add_argument(
     '--report', '-r', help='Report via CLI the status of a given station', type=str, default=None)
 parser.add_argument(
+    '--refresh-stations', help='Refresh the list of services of the stations', action='store_true')
+parser.add_argument(
     '--user', '-u', help='(optional) User to connect to the station', type=str, default=None)
 parser.add_argument(
     '--password', '-p', help='(optional) Password to use for the report', type=str, default=None)
@@ -68,3 +70,7 @@ if args.report:
     print("Error: %s" % e)
   finally:
     print("La estación %s está funcionando correctamente" % args.report)
+
+if args.refresh_stations:
+  r = Reporter()
+  r.refresh_stations()

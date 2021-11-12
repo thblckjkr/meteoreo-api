@@ -119,6 +119,28 @@ class Reporter:
       reporter = StationReporter(station)
       reporter.generate_station_status()
 
+  def refresh_stations(self):
+    """Refreshes the stations
+
+    This method helps to refresh the list of services available in each station
+    (Helpful for when the driver is updated)
+    """
+    stations = self.get_stations()
+
+    for station in stations:
+      # Create a instance of the driver
+      driver = Bridge.get_driver_instance(station)
+
+      # Get the available services according to the driver
+      station.services = instance.get_services()
+
+      # Tries to save the station in the database
+      try:
+        station.save()
+      except Exception as e:
+        logger.error("Error saving station: %s", str(e))
+        continue
+
   def get_stations(self):
     """Get a list of the available stations
 
@@ -188,7 +210,7 @@ class StationReporter:
     """
     if data is None:
       data = {
-        path: None,
+        'path': "",
       }
 
     logger.warning("Generating event for station %s", self.station.name)
@@ -197,7 +219,8 @@ class StationReporter:
     lastEvent = StationEvent.where({
         "type": error,
         "path": data['path'],
-        "station_id": self.station.id
+        "station_id": self.station.id,
+        "status": "pending"
     }).get()
 
     if lastEvent.is_empty():

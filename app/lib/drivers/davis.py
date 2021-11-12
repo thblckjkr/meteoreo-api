@@ -28,7 +28,6 @@ DRIVER_EXECUTOR = 'SSH'
 DRIVERS_LIST = ['RpiDavisStation']
 
 DEFAULT_SERVICES_MAP = {
-
     # Check the MySQL service
     "mysql": {
         "command": "systemctl status mysql",
@@ -80,7 +79,27 @@ DEFAULT_SERVICES_MAP = {
                 }
             }
         }
-    }
+    },
+
+    # Check the status of ReadOnly Pi
+    "RoPi": {
+        "command": "echo $(awk '/root/{print $4}' /proc/mounts | awk -F , '{print $1}')",
+        "stdout": "ro",
+        "stderr": None,
+        "actions": {
+            "read_write_enabled": {
+                "description": "La estación está en modo escritura",
+                "solution": "Reactivar el modo sólo lectura",
+                "response_stdout": "rw",
+                "response_stderr": None,
+
+                # Solution and the expected solution result
+                "command": "sudo remountro",
+                "stdout": None,
+                "stderr": None,
+            }
+        }
+    },
 }
 
 
@@ -226,7 +245,7 @@ class RpiDavisStation():
           pass
       else:
         # Checks for the current stdout on the actions dictionary
-        for name, action in  operations['actions'].items():
+        for name, action in operations['actions'].items():
           if (action['response_stdout'] == None and len(stdout) == 0) or action['response_stdout'] in stdout:
             if (action['response_stderr'] == None and len(stderr) == 0) or action['response_stderr'] in stderr:
               # If it matches, it means that we have a action to do
@@ -237,8 +256,8 @@ class RpiDavisStation():
                   'stderr': stderr,
                   'description': action['description'],
                   'solution': action['solution'],
+                  'command': action['command'] if 'command' in action else None,
                   'path': f'%s.actions.%s' % (service, name)
-
               }
 
         problems.append(status)

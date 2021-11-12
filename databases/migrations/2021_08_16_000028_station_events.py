@@ -12,7 +12,7 @@ class StationEvents(Migration):
       table.increments("id")
       table.uuid("station_id")
       table.string(column="type", length=16, nullable=False)
-      table.string(column="path")
+      table.string(column="path", nullable=True)
       table.json(column="data")
       table.string(column="status")
 
