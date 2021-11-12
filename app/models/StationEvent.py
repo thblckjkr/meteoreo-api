@@ -1,5 +1,6 @@
 from masoniteorm.models import Model
 from masoniteorm.scopes import SoftDeletesMixin
+from masoniteorm.relationships import belongs_to
 
 
 class StationEvent(Model, SoftDeletesMixin):
@@ -12,3 +13,8 @@ class StationEvent(Model, SoftDeletesMixin):
   __hidden__ = ['deleted_at']
 
   __casts__ = { "data": "json" }
+
+  @belongs_to( "station_id", "id")
+  def station(self):
+    from app.models.Station import Station
+    return Station

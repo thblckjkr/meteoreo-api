@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import stations
 from app.routers import drivers
+from app.routers import incidents
 
 # Load environment variables (from .env) and add them to the os.getenv() function
 load_dotenv()
@@ -54,3 +55,4 @@ app.add_middleware(
 
 app.include_router(stations.router, prefix="/api/v1")
 app.include_router(drivers.router, prefix="/api/v1")
+app.include_router(incidents.router, prefix="/api/v1")

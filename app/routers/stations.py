@@ -70,9 +70,10 @@ async def put_station(station: StationRequest.Schema):
   stationModel.port = station.port
   stationModel.username = station.username
   stationModel.driver = station.driver
+  stationModel.has_key = False
 
   # Create a instance of the driver
-  instance = Bridge.get_driver_instance(station)
+  instance = Bridge.get_driver_instance(stationModel)
 
   # # Get the available services according to the driver
   stationModel.services = instance.get_services()
