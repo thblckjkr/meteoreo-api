@@ -80,8 +80,8 @@ class RemoteExecutor(ExecutorBase):
                    pkey=paramiko.RSAKey.from_private_key_file(self._pem) if self._pem else None)
 
     stdin, stdout, stderr = client.exec_command(command)
-    out=stdout.read().decode().strip()
-    err=stderr.read().decode().strip()
+    out = stdout.read().decode().strip()
+    err = stderr.read().decode().strip()
 
     client.close()
     return out, err

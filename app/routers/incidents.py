@@ -7,6 +7,7 @@ router = APIRouter(
     # dependencies=[Depends(StationRequest.Schema), Depends(Station)]
 )
 
+
 @router.get("/")
 def get_incidents():
   """
@@ -18,4 +19,3 @@ def get_incidents():
     incident.station = incident.station.serialize()
 
   return incidents.serialize()
-

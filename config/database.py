@@ -47,4 +47,3 @@ logger.addHandler(handler)
 logger.addHandler(file_handler)
 
 DB = ConnectionResolver().set_connection_details(DATABASES)
-

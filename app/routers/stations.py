@@ -31,15 +31,18 @@ def read_stations():
   stations = Station.all()
 
   for station in stations:
-    station.incidents = station.events.where("status", "!=", "resolved").serialize()
+    station.incidents = station.events.where(
+        "status", "!=", "resolved").serialize()
 
   return {
-    "stations": stations.serialize()
+      "stations": stations.serialize()
   }
 
 # -------------------------
 # Single station operations
 # -------------------------
+
+
 @router.get("/{uuid}")
 def get_station(uuid: str):
   """
@@ -49,6 +52,7 @@ def get_station(uuid: str):
   result.incidents = result.events.serialize()
 
   return result.serialize()
+
 
 @router.put("/")
 async def put_station(station: StationRequest.Schema):
@@ -82,14 +86,16 @@ async def put_station(station: StationRequest.Schema):
   try:
     status = instance.get_status()
   except:
-    raise HTTPException(status_code=422, detail="Unable to connect to the station")
+    raise HTTPException(
+        status_code=422, detail="Unable to connect to the station")
 
   # Use the instance of the driver to register the station
   try:
     instance.register(station)
     stationModel.has_key = True
   except:
-    raise HTTPException(status_code=422, detail="Unable to register the station")
+    raise HTTPException(
+        status_code=422, detail="Unable to register the station")
 
   # Store the station in the database
   try:
@@ -98,9 +104,10 @@ async def put_station(station: StationRequest.Schema):
     raise HTTPException(status_code=500, detail="Unable to save the station")
 
   return {
-    "status": "Ok",
-    "model":stationModel.serialize()
+      "status": "Ok",
+      "model": stationModel.serialize()
   }
+
 
 @router.delete("/{uuid}")
 def delete_station(uuid: UUID):

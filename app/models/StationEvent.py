@@ -12,9 +12,9 @@ class StationEvent(Model, SoftDeletesMixin):
 
   __hidden__ = ['deleted_at']
 
-  __casts__ = { "data": "json" }
+  __casts__ = {"data": "json"}
 
-  @belongs_to( "station_id", "id")
+  @belongs_to("station_id", "id")
   def station(self):
     from app.models.Station import Station
     return Station

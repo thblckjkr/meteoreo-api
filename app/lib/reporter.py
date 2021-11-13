@@ -199,7 +199,7 @@ class StationReporter:
     logger.warning('The station %s using the driver %s was correctly scanned',
                    self.station.name, self.station.driver)
 
-  def generate_event(self, error, data = None):
+  def generate_event(self, error, data=None):
     """ Generates an event for the station
 
     This method is called when the status of the station changes.
@@ -210,7 +210,7 @@ class StationReporter:
     """
     if data is None:
       data = {
-        'path': "",
+          'path': "",
       }
 
     logger.warning("Generating event for station %s", self.station.name)
@@ -227,11 +227,11 @@ class StationReporter:
       # If there is no event, create a new one
       event = StationEvent()
 
-      event.station_id=self.station.id
-      event.type=error
-      event.path=data['path']
-      event.data=data
-      event.status="pending"
+      event.station_id = self.station.id
+      event.type = error
+      event.path = data['path']
+      event.data = data
+      event.status = "pending"
       event.save()
     else:
       # If there is an event, update the last reported time

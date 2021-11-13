@@ -1,6 +1,7 @@
 # Standard imports
 from abc import ABCMeta, abstractmethod
 
+
 class ExecutorBase(metaclass=ABCMeta):
   """ Base class for an executor """
 

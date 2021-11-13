@@ -14,7 +14,7 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
 
   __hidden__ = ["created_at", "updated_at", "deleted_at"]
 
-  __casts__ = { "services": "json" }
+  __casts__ = {"services": "json"}
 
   # Gets ip as a ipaddress class
   def get_ip_address_attribute(self):
@@ -28,7 +28,7 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
 
     return int(ipaddress.ip_address(attribute))
 
-  @has_many( "id", "station_id")
+  @has_many("id", "station_id")
   def events(self):
     from app.models.StationEvent import StationEvent
     return StationEvent
