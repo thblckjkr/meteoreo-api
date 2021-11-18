@@ -11,8 +11,8 @@
 #
 # @author: Teo Gonzalez Calzada [@thblckjkr]
 
-from pydantic import BaseModel
-from fastapi import Query
+# from pydantic import BaseModel
+# from fastapi import Query
 
 from ..Executor.ExecutorFactory import ExecutorFactory
 from ..Exceptions.Generic import *
@@ -101,6 +101,14 @@ DEFAULT_SERVICES_MAP = {
         }
     },
 }
+
+
+def get_element(element, array):
+  keys = element.split('.')
+  rv = array
+  for key in keys:
+    rv = rv[key]
+  return rv
 
 
 class RpiDavisStation():
@@ -263,3 +271,55 @@ class RpiDavisStation():
         problems.append(status)
 
     return None if len(problems) == 0 else problems
+
+  def fix(self, path):
+    """Fixes a problem on the station
+
+    Args:
+        path (str): The path of the problem to be fixed
+    """
+
+    # Gets the action to be performed from the path
+    main_action = get_element(path, self.services_map)
+
+    # Gets the command to execute
+    command = main_action['command']
+
+    # Executes the command
+    [stdout, stderr] = self.executor.run(command)
+
+    # Checks if the command was executed successfully
+    if (main_action['response_stdout'] == None and len(stdout) == 0) or main_action['response_stdout'] in stdout:
+      if (main_action['response_stderr'] == None and len(stderr) == 0) or main_action['response_stderr'] in stderr:
+        return {
+            'status': 'success',
+            'stdout': stdout,
+            'stderr': stderr
+        }
+
+    # Checks for the current stdout on the actions dictionary
+    for name, action in main_action['actions'].items():
+      if (action['response_stdout'] == None and len(stdout) == 0) or action['response_stdout'] in stdout:
+        if (action['response_stderr'] == None and len(stderr) == 0) or action['response_stderr'] in stderr:
+          # If it matches, it means that we have a action to do
+          return {
+              'status': 'error',
+              'problem': {
+                  'service': path.split('.')[0],
+                  'action': name,
+                  'stdout': stdout,
+                  'stderr': stderr,
+                  'description': action['description'],
+                  'solution': action['solution'],
+                  'command': action['command'] if 'command' in action else None,
+                  'path': f'%s.actions.%s' % (service, name)
+              }
+          }
+
+    return {
+        'status': 'error',
+        'stdout': stdout,
+        'stderr': stderr
+    }
+
+# Todo what if the action do not have actions or a command?
