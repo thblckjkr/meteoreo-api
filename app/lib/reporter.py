@@ -195,9 +195,9 @@ class StationReporter:
     if problems is not None:
       for problem in problems:
         self.generate_event("service_error", problem)
-    else:
-      # If there were no problems, solve all the previous registered events
-      self.solve_events()
+
+    # Solve events that were not present in the scan.
+    self.solve_events(problems)
 
     logger.warning('The station %s using the driver %s was correctly scanned',
                    self.station.name, self.station.driver)
@@ -240,15 +240,29 @@ class StationReporter:
       # If there is an event, update the last reported time
       lastEvent.first().touch()
 
-  def solve_events(self):
+  def solve_events(self, problems):
     """Solves the events of the station
 
     This method is called when the station was scanned and there were no problems.
 
-    It solves all the events of the station that are pending.
+    If there were no problems, solve all the previous registered events.
+
+    If there were problems, check if the previous event was a driver or network error,
+    if it was, and it was solved, solve the event.
+
+    If there were problems and the problems were service errors, solve the events that were not solved.
+
+    #! TODO: This is not implemented yet
     """
-    events = StationEvent.where(
-        {"station_id": self.station.id, "status": "pending"}).get()
+    if problems is None:
+      events = StationEvent.unresolved().where({
+          "station_id": self.station.id
+      }).get()
+    else:
+      events = StationEvent.unresolved().where({
+          "station_id": self.station.id,
+          "type": "service_error"
+      }).get()
 
     print("Solving events for station " + self.station.name)
     for event in events:

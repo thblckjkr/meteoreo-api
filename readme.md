@@ -13,7 +13,7 @@ La idea es que esto sirva como un registro informal de lo que pasa por mio cabez
 
 ### Recabado de información del estado de las estaciones
 
-Debido a la naturaleza autónoma de las estaciones meteorológicas, y a que el hecho que las mismas se encuentran sometidas a [something something] se busca crear un sistema centralizado de recolección de información 
+Debido a la naturaleza autónoma de las estaciones meteorológicas, y a que el hecho que las mismas se encuentran sometidas a [something something] se busca crear un sistema centralizado de recolección de información
 
 ### Conexión a estaciones remotas
 
@@ -29,7 +29,7 @@ Para la conexión a las estaciones RaspberryPi se considera lo siguiente:
 
 ![Figura 1.1](/home/thblckjkr/repos/tesis/resources/conexion.png)
 
-Por esta razón se optó por tener un servicio de monitoreo bidireccional. Se pretende que cambiando el ejecutor de servicios, se pueda obtener la información de la estación meteorológica sin necesidad de realizar diferentes implementaciones para cada caso. En este caso, se pretende que un script funcione en el mismo 
+Por esta razón se optó por tener un servicio de monitoreo bidireccional. Se pretende que cambiando el ejecutor de servicios, se pueda obtener la información de la estación meteorológica sin necesidad de realizar diferentes implementaciones para cada caso. En este caso, se pretende que un script funcione en el mismo
 
 > Indicar especificaciónes específicas para mi producto.
 >
@@ -76,14 +76,14 @@ Desviándonos de el sistema de manejo de excepciones propuesto para Java de Orac
 **Conectividad de red**
 
 - No hay conexión de ninguna dirección
-- No hay VPN pero sí conexión de la estación al servidor, 
+- No hay VPN pero sí conexión de la estación al servidor,
 - No hay servidor VPN
 
 **Weewx, davis, serial overload:** Problemas de comunicación serial de Davis a la RPi.
 
 Esto pasa cuando se des-sincroniza
 
-- Reiniciar puerto serial. `vantage: Unable to wake up console` 
+- Reiniciar puerto serial. `vantage: Unable to wake up console`
 
 ```
 $ sudo wee_device --clear-memory
@@ -200,7 +200,7 @@ En este archivo se especifica un nombre para identificar el ambiente de desarrol
 
 Debido a la facilidad de uso que ofrecen las librerías de conexión *ORM* para la traducción de bases de datos a modelos de código, se decidió utilizarlas. La librería específica que se decidió utilizar para el desarrollo del proyecto es  *Masonite-ORM* debido a que ofrece un ambiente de trabajo agnóstico a otras librerías, y tiene una amplia compatibilidad con diferentes motores de bases de datos.
 
-De acuerdo al artículo [10.1007/978-3-642-10424-4_13](https://link.springer.com/chapter/10.1007/978-3-642-10424-4_13), la 
+De acuerdo al artículo [10.1007/978-3-642-10424-4_13](https://link.springer.com/chapter/10.1007/978-3-642-10424-4_13), la
 
 Se preparó un script para la inserción de la información a la base de datos de la siguiente forma:
 
@@ -298,9 +298,13 @@ pi:climasUACJ
 
 ## Bitacora accionable
 
-Idea para futuro: que un usuario pueda utilizar la interfaz gráfica para crear un "if X then do Y" y almacenarla ya sea como un paso extra en el script del driver de la estación meteorológica, o como código accionabvle (pasos)  en la base de datos. 
+Idea para futuro: que un usuario pueda utilizar la interfaz gráfica para crear un "if X then do Y" y almacenarla ya sea como un paso extra en el script del driver de la estación meteorológica, o como código accionabvle (pasos)  en la base de datos.
 
 ## Despliegue del sistema
 
 > Documentar proceso de deployment en prod
 
+
+## Desarrollo de servicios para scripts
+
+La mayoría de los sistemas configurables extendibles para monitoreo de sistemass (específicamente monitoring plugins) son scripts que pueden ser llamados desde la línea de comandos y aceptan argumentos para ser ejecutados en otros sistemas. Esto,
