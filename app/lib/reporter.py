@@ -185,7 +185,7 @@ class StationReporter:
       # Fatal error that isn't a network error
       logger.error(
           "There was an error while getting the status of the station %s: %s", self.station.name, str(e))
-      self.generate_event(e)
+      self.generate_event("driver_error")
       return
 
     self.station.last_scan = datetime.datetime.now()
@@ -243,28 +243,29 @@ class StationReporter:
   def solve_events(self, problems):
     """Solves the events of the station
 
-    This method is called when the station was scanned and there were no problems.
+    This method is called when the station was scanned and there are problems to automatically solve.
 
     If there were no problems, solve all the previous registered events.
 
-    If there were problems, check if the previous event was a driver or network error,
+    If there were problems, check if there is a driver or network error,
     if it was, and it was solved, solve the event.
 
     If there were problems and the problems were service errors, solve the events that were not solved.
-
-    #! TODO: This is not implemented yet
     """
     if problems is None:
       events = StationEvent.unresolved().where({
           "station_id": self.station.id
       }).get()
+      logger.warning("Solving all pending events of the station %s", self.station.name)
     else:
       events = StationEvent.unresolved().where({
           "station_id": self.station.id,
           "type": "service_error"
       }).get()
+      logger.warning("Solving all pending events of the station %s", self.station.name)
 
-    print("Solving events for station " + self.station.name)
+
+    logger.warning("Solving events for station %s: %s", self.station.name, events.serialize())
     for event in events:
       event.status = "auto_solved"
       event.comment = None

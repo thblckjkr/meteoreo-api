@@ -31,8 +31,7 @@ def read_stations():
   stations = Station.all()
 
   for station in stations:
-    station.incidents = station.events.where(
-        "status", "!=", "resolved").serialize()
+    station.incidents = station.events.serialize()
 
   return {
       "stations": stations.serialize()

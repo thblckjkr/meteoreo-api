@@ -1,5 +1,5 @@
 from masoniteorm.models import Model
-from masoniteorm.scopes import SoftDeletesMixin
+from masoniteorm.scopes import scope, SoftDeletesMixin
 from masoniteorm.relationships import belongs_to
 
 
@@ -18,3 +18,7 @@ class StationEvent(Model, SoftDeletesMixin):
   def station(self):
     from app.models.Station import Station
     return Station
+
+  @scope
+  def unresolved(self, query):
+    return self.where_not_in('status', [ 'resolved', 'auto_solved', 'ignored' ])

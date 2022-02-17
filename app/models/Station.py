@@ -29,6 +29,9 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
     return int(ipaddress.ip_address(attribute))
 
   @has_many("id", "station_id")
-  def events(self):
+  def events(self, all=False):
     from app.models.StationEvent import StationEvent
-    return StationEvent
+    if all:
+      return StationEvent
+
+    return StationEvent.unresolved()

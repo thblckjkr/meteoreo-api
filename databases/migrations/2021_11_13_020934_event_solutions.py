@@ -8,7 +8,7 @@ class EventSolutions(Migration):
     """
     Run the migrations.
     """
-    with self.schema.table("stations") as table:
+    with self.schema.table("station_events") as table:
       table.string("comment", nullable=True)
       table.string("solution", nullable=True)
       table.string("solved_by", length=16, nullable=True)
