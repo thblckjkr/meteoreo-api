@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import time
 import logging
 import argparse
 import config.sentry  # Automatic sentry error reporting and logging
@@ -10,6 +11,8 @@ parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
 
 parser.add_argument(
     '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', action='store_true')
+parser.add_argument(
+    '--frecuecy', '-f', help='Frecuency of the scan in seconds', type=int, default=60)
 parser.add_argument(
     '--report', '-r', help='Report via CLI the status of a given station', type=str, default=None)
 parser.add_argument(
@@ -26,6 +29,11 @@ parser.add_argument(
     '--debug', '-d', help='Debug mode', action='store_true')
 
 args = parser.parse_args()
+
+# If the script is called directly, then throw an error
+if __name__ == "__main__":
+    sys.stderr.write("This script is not meant to be called directly.\n")
+    sys.exit(1)
 
 # Define the global logging configuration.
 # If the verbose flag is set, the logging level will output everything to stdout
@@ -55,8 +63,17 @@ if not args.scan and not args.report:
   sys.exit(1)
 
 if args.scan:
-  r = Reporter()
-  r.routine()
+  # This method should be called from systemd, expecting it to never return
+  if not hasattr(args, 'frequency'):
+    args.frequency = 60
+
+  while True:
+    print("Running reporter")
+    reporter = Reporter()
+    reporter.routine()
+
+    print("Done. Sleeping for {0} seconds".format(args.frecuecy))
+    time.sleep(args.frequency)
 
 if args.report:
   import lib.drivers.davis

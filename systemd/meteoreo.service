@@ -3,7 +3,8 @@ Description=Meteoreo Reporting Scheduler
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/meteoreo --scan
+EnvironmentFile=/app/meteoreo/.env
+ExecStart=/app/meteoreo --scan --frequency${FREQUENCY} --debug
 Restart=on-success
 
 [Install]
