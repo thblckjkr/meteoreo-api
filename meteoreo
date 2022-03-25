@@ -30,9 +30,9 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-# If the script is called directly, then throw an error
-if __name__ == "__main__":
-    sys.stderr.write("This script is not meant to be called directly.\n")
+# If the script is not called directly, then throw an error
+if __name__ != "__main__":
+    sys.stderr.write("This script is meant to be called directly.\n")
     sys.exit(1)
 
 # Define the global logging configuration.
