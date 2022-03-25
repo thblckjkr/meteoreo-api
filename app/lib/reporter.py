@@ -9,6 +9,7 @@ import datetime
 
 from app.models.Station import Station
 from app.models.StationEvent import StationEvent
+from .notifications import NotificationProvider
 from .Exceptions.Generic import NetworkError
 
 logger = logging.getLogger(__name__)
@@ -239,6 +240,17 @@ class StationReporter:
     else:
       # If there is an event, update the last reported time
       lastEvent.first().touch()
+
+    try:
+      notification = NotificationProvider()
+      notification.build(
+        station = self.station,
+        error = error,
+      )
+
+      notification.send(is_new_event=lastEvent.is_empty())
+    except Exception as e:
+      logger.error("Error sending notification: %s", str(e))
 
   def solve_events(self, problems):
     """Solves the events of the station
