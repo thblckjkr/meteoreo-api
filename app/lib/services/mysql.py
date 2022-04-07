@@ -2,5 +2,8 @@
 service = {
     "command": "systemctl status mysql",
     "stdout": "Active: active (running) since",
-    "stderr": None
+    "stderr": None,
+    "actions": {
+
+    }
 }
