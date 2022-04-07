@@ -8,7 +8,7 @@ services:
     volumes:
       - './:/app:delegated'
     depends_on:
-      - mysql
+      - mariadb
     environment:
       - WEB_CONCURRENCY=2
       - PORT=80
@@ -18,22 +18,24 @@ services:
       - '81:80'
     networks:
       - meteoreo-backend
+    restart: always
 
   daemon:
     container_name: meteoreo-daemon
-    image: python:3.8
+    image: python:3.7
     volumes:
       - './:/app:delegated'
     depends_on:
       - mysql
     command:
-      - /app/app/daemon.py --scan --frequency=${SCAN_FREQUENCY}
+      - /app/meteoreo --scan --frequency=${SCAN_FREQUENCY}
     networks:
       - meteoreo-backend
+    restart: always
 
-  mysql:
-    image: mysql
-    container_name: meteoreo-mysql
+  mariadb:
+    image: mariadb
+    container_name: meteoreo-mariadb
     environment:
       MYSQL_DATABASE: '${MYSQL_DATABASE}'
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
@@ -41,11 +43,18 @@ services:
       MYSQL_USER: '${MYSQL_USER}'
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    volumes:
+      - 'meteoreodb:/var/lib/mysql'
     ports:
       - '3306:3306'
     networks:
       - meteoreo-backend
+    restart: always
 
 networks:
   meteoreo-backend:
     driver: bridge
+
+volumes:
+  meteoreodb:
+    driver: local
