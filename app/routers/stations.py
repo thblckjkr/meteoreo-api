@@ -20,9 +20,8 @@ router = APIRouter(
 # All stations operations
 # --------------------------
 
-
 @router.get("/")
-def read_stations():
+def read_stations(credentials: HTTPBasicCredentials = Depends(security)):
   """Get all stations
 
   Returns:
