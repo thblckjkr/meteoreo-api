@@ -167,27 +167,44 @@ class BaseDriver():
     # Runs the services check, we need to just recurse the first level
     # This can be changed to a recursive function.
     for service, operations in self.services_map.items():
-      [stdout, stderr] = self.executor.run(operations['command'])
+      status = None
+      [ stdout, stderr ] = self.executor.run(operations['command'])
 
-      if (operations['stdout'] == None and len(stdout) == 0) or operations['stdout'] in stdout:
-        if (operations['stderr'] == None and len(stderr) == 0) or operations['stderr'] in stderr:
-          pass
+      # Checks if the stdout and stderr matches the operations stdout and stderr.
+      # If the operations are None, we check if the stdout and stderr length is 0
+      if ((operations['stdout'] is None and stdout == '') or operations['stdout'] in stdout) and \
+          ((operations['stderr'] is None and stderr == '') or operations['stderr'] in stderr):
+          continue
+          # If the service is OK, we pass
       else:
-        # Checks for the current stdout on the actions dictionary
+        # Check in the array of operations actions, and check if the stderr matches one of them
         for name, action in operations['actions'].items():
-          if (action['response_stdout'] == None and len(stdout) == 0) or action['response_stdout'] in stdout:
-            if (action['response_stderr'] == None and len(stderr) == 0) or action['response_stderr'] in stderr:
-              # If it matches, it means that we have a action to do
-              status = {
-                  'service': service,
-                  'action': name,
-                  'stdout': stdout,
-                  'stderr': stderr,
-                  'description': action['description'],
-                  'solution': action['solution'],
-                  'command': action['command'] if 'command' in action else None,
-                  'path': f'%s.actions.%s' % (service, name)
-              }
+          if ((action['response_stdout'] is None and stdout == '') or action['response_stdout'] in stdout) and \
+              ((action['response_stderr'] is None and stderr == '') or action['response_stderr'] in stderr):
+            # If the stderr matches, we add the action to the problems
+            status = {
+                'service': service,
+                'action': name,
+                'stdout': stdout,
+                'stderr': stderr,
+                'description': action['description'],
+                'solution': action['solution'],
+                'command': action['command'] if 'command' in action else None,
+                'path': f'%s.actions.%s' % (service, name)
+            }
+            break
+
+        # If the stderr does not match any action, we add the service to the problems
+        if status is None:
+          status = {
+              'service': service,
+              'stdout': stdout,
+              'stderr': stderr,
+              'description': None,
+              'solution': None,
+              'command': None,
+              'path': f'%s.actions' % service
+          }
 
         problems.append(status)
 

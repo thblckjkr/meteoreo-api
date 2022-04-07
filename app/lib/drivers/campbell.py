@@ -13,6 +13,7 @@ DEFAULT_SERVICES_MAP = {
     "weewx": weewx.service,
     "RoPi": ropi.service,
     "proxy": proxy.service,
+    # "cambpell": campbell.service
 }
 
 class RpiCampbellStation(BaseDriver):

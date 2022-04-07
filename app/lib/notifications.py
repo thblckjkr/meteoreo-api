@@ -13,7 +13,7 @@ class NotificationProvider:
 
   """Builds a notification
   """
-  def build(self, error, station, segment):
+  def build(self, error, station, segment = None):
     # station.name
     self.notification = {
         'contents': {
