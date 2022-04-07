@@ -14,6 +14,7 @@ service = {
             "description": "Problema de conexión a la consola Davis por puerto serial",
             "solution": "Reinicia la memoria de la consola Davis por medio de la opción --clear-memory",
             "response_stdout": "vantage: Unable to wake up console",
+            "response_stderr": None,
             "command": "sudo wee_device --clear-memory && sudo wee_device --info",
             "actions": {
                 # There is no connection to clear the memory of the station

@@ -11,6 +11,7 @@ service = {
         "bad_time": {
             "name": "Por alguna extraña razón el comando date '+%\s' dió error",
             "response_stderr": "",
+            "response_stdout": "",
             "action": "No hay nada que hacer"
         }
     }
