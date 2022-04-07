@@ -1,6 +1,6 @@
 # Checks if the proxy server is running. The file is stored in /mnt/proxy
 service = {
-  "command": 'pgrep -f "sudo python port-forward.py" >/dev/null && echo "Running" || echo "Not running"',
+  "command": 'pgrep -x -f "sudo python port-forward.py" >/dev/null && echo "Running" || echo "Not running"',
   "description": "Check if the proxy server is running",
   "stdout": "Running",
   "stderr": None,
