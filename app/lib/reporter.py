@@ -9,6 +9,8 @@ import datetime
 
 from app.models.Station import Station
 from app.models.StationEvent import StationEvent
+from app.models.EventSolutions import EventSolutions
+
 from .notifications import NotificationProvider
 from .Exceptions.Generic import NetworkError
 
@@ -280,8 +282,13 @@ class StationReporter:
     logger.warning("Solving events for station %s: %s", self.station.name, events.serialize())
     for event in events:
       event.status = "auto_solved"
-      event.comment = None
-      event.solution = "Solución automática al escanearse la estación"
-      event.solved_by = "auto"
-      event.solved_at = datetime.datetime.now()
+
+      EventSolutions.create({
+          "station_event_id": event.id,
+          "solution": "Solución automática al escanearse la estación",
+          "solved_by": "auto",
+          "solved_at": datetime.datetime.now(),
+          "station_id": self.station.id
+      })
+
       event.save()

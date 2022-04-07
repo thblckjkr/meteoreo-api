@@ -19,4 +19,10 @@ class EventSolutions(Migration):
     """
     Revert the migrations.
     """
+    with self.schema.table("station_events") as table:
+      table.drop_column("comment")
+      table.drop_column("solution")
+      table.drop_column("solved_by")
+      table.drop_column("solved_at")
+      pass
     pass

@@ -40,13 +40,7 @@ def solve_incident(id: int, incident: IncidentRequest.Schema):
         detail="Incident with id {} not found".format(id)
     )
 
-  if incident.status != "pending":
-    raise HTTPException(
-        status_code=400,
-        detail="Incident with id {} is already solved".format(id)
-    )
-
-  if incident.type != "service_error":
+  if not incident.solvable:
     raise HTTPException(
         status_code=400,
         detail="Only service_errors can be solved"
@@ -71,12 +65,15 @@ def solve_incident(id: int, incident: IncidentRequest.Schema):
 
   if fixed == True:
     incident.status = "solved"
-    incident.comment = "asdf"
-    incident.solution = "Solución automática del problema"
-    incident.solved_by = "auto"
-    incident.solved_at = datetime.datetime.now()
+
+    incident.solutions = EventSolutions.create({
+        "comment": "",
+        "solution": "",
+        "solved_by": "auto",
+        "solved_at": datetime.datetime.now(),
+        "station_id": incident.station.id
+    })
+
     incident.save()
 
   # Tries to solve the incident, loading the driver and executing the path command
-
-
