@@ -20,18 +20,18 @@ services:
       - meteoreo-backend
     restart: always
 
-  daemon:
-    container_name: meteoreo-daemon
-    image: python:3.7
-    volumes:
-      - './:/app:delegated'
-    depends_on:
-      - mysql
-    command:
-      - /app/meteoreo --scan --frequency=${SCAN_FREQUENCY}
-    networks:
-      - meteoreo-backend
-    restart: always
+  # daemon:
+  #   container_name: meteoreo-daemon
+  #   image: python:3.7
+  #   volumes:
+  #     - './:/app:delegated'
+  #   depends_on:
+  #     - mariadb
+  #   command:
+  #     - /app/meteoreo --scan --frequency=${SCAN_FREQUENCY}
+  #   networks:
+  #     - meteoreo-backend
+  #   restart: always
 
   mariadb:
     image: mariadb
