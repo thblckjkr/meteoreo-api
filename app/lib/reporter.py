@@ -174,6 +174,10 @@ class StationReporter:
 
     Connects to the station via driver, checks the status and generates an event if neccessary
     """
+    # Touches and stores the last scan time
+    self.station.last_scan = datetime.datetime.now()
+    self.station.save()
+
     try:
       self.driver.connect()
       problems = self.driver.scan()
@@ -182,6 +186,7 @@ class StationReporter:
       logger.warning(
           "There was a connection error to the station %s", self.station.name)
       self.generate_event("network_error")
+      self.solve_events(None, "network_error")
       return  # If the network is down, we can't get the status, so we just return and end the function
 
     except Exception as e:
@@ -189,10 +194,8 @@ class StationReporter:
       logger.error(
           "There was an error while getting the status of the station %s: %s", self.station.name, str(e))
       self.generate_event("driver_error")
-      return
-
-    self.station.last_scan = datetime.datetime.now()
-    self.station.save()
+      self.solve_events(None, "driver_error")
+      return # If there is a driver error, there is no way we can have a status
 
     # Check the contents of status, to see if there were any errors, and send the errors to the generator
     if problems is not None:
@@ -200,10 +203,10 @@ class StationReporter:
         self.generate_event("service_error", problem)
 
     # Solve events that were not present in the scan.
-    self.solve_events(problems)
+    self.solve_events(problems, "service_error")
 
-    logger.warning('The station %s using the driver %s was correctly scanned',
-                   self.station.name, self.station.driver)
+    # logger.warning('The station %s using the driver %s was correctly scanned',
+    #                self.station.name, self.station.driver)
 
   def generate_event(self, error, data=None):
     """ Generates an event for the station
@@ -219,8 +222,6 @@ class StationReporter:
           'path': "",
       }
 
-    logger.warning("Generating event of type %s for station %s", error, self.station.name)
-
     # Check if there is an event of the same error type and in the same path
     lastEvent = StationEvent.where({
         "type": error,
@@ -230,6 +231,8 @@ class StationReporter:
     }).get()
 
     if lastEvent.is_empty():
+      logger.warning("Generating event of type %s for station %s", error, self.station.name)
+
       # If there is no event, create a new one
       event = StationEvent()
 
@@ -240,6 +243,7 @@ class StationReporter:
       event.status = "pending"
       event.save()
     else:
+      logger.warning("Touching event %s for station %s", error, self.station.name)
       # If there is an event, update the last reported time
       lastEvent.first().touch()
 
@@ -254,32 +258,51 @@ class StationReporter:
     except Exception as e:
       logger.error("Error sending notification: %s", str(e))
 
-  def solve_events(self, problems):
+  def solve_events(self, problems, type):
     """Solves the events of the station
 
-    This method is called when the station was scanned and there are problems to automatically solve.
+    This method is called when the station is scanned, and there is not networ or driver error.
+    So, if this method is called, it means that the station is working correctly, and we can solve
+    the events that were not present in the scan.
 
-    If there were no problems, solve all the previous registered events.
+    If the problem is a network error, that means that driver is correctly working, so we can solve
+    the event.
 
-    If there were problems, check if there is a driver or network error,
-    if it was, and it was solved, solve the event.
+    If the problem is a service error, that means network and drivers problem can be solved.
 
-    If there were problems and the problems were service errors, solve the events that were not solved.
+    It checks the events of the station, and solves them if they are not present in the scan.
     """
+
+    if type == "driver_error":
+      # If the driver is not working, we can't solve the events
+      return
+
     if problems is None:
       events = StationEvent.unresolved().where({
-          "station_id": self.station.id
-      }).get()
-      logger.warning("Solving all pending events of the station %s", self.station.name)
+          "station_id": self.station.id,
+      })
+
+      # All problems must be solved?
+      if type == "network_error":
+        events.where({
+          "type": "driver_error",
+        })
+      elif type == "service_error":
+        # Solves all events
+        events.where_in(
+          "type", [ "network_error", "driver_error", "service_error" ]
+        )
     else:
+      # Only the problems with the same path must be solved
       events = StationEvent.unresolved().where({
           "station_id": self.station.id,
-          "type": "service_error"
-      }).get()
-      logger.warning("Solving all pending events of the station %s", self.station.name)
+      }).where_not_in(
+          "path", [p['path'] for p in problems]
+      )
 
+    events = events.get()
 
-    logger.warning("Solving events for station %s: %s", self.station.name, events.serialize())
+    logger.warning("Solving events for station %s: %s [%s]", self.station.name, events.serialize(), problems)
     for event in events:
       event.status = "auto_solved"
 
