@@ -1,6 +1,9 @@
 from onesignal_sdk.client import Client
 import config.notification as notification
 
+import logging
+logger = logging.getLogger(__name__)
+
 # TODO: Add support for more notification drivers
 class NotificationProvider:
   def __init__(self):
@@ -47,6 +50,6 @@ class NotificationProvider:
       try:
         response = self.client.send_notification(self.notification)
         logger.info("Notification sent: %s", response)
-      except Error as e:
+      except Exception as e:
         logger.error("Error sending notification: %s", str(e))
         raise e
