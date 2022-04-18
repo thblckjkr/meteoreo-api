@@ -1,5 +1,17 @@
 {
-  "configurations": [
+  "configurations": [{
+      "name": "Debug meteoreo scan",
+      "type": "python",
+      "request": "launch",
+      "program": "meteoreo.py",
+      "args": [
+        "--scan"
+      ],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+    },
     {
       "name": "Python: FastAPI - app",
       "type": "python",
