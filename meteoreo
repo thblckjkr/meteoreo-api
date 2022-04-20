@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 import time
 import logging
@@ -7,12 +8,16 @@ import argparse
 import config.sentry  # Automatic sentry error reporting and logging
 from app.lib.reporter import Reporter  # Main logic class
 
+# Load dotenv
+from dotenv import load_dotenv
+load_dotenv()
+
 parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
 
 parser.add_argument(
     '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', action='store_true')
 parser.add_argument(
-    '--frecuecy', '-f', help='Frecuency of the scan in seconds', type=int, default=60)
+    '--frecuecy', '-f', help='Frecuency of the scan in seconds', type=int)
 parser.add_argument(
     '--report', '-r', help='Report via CLI the status of a given station', type=str, default=None)
 parser.add_argument(
@@ -63,10 +68,11 @@ if not args.scan and not args.report:
   sys.exit(1)
 
 if args.scan:
-  # This method should be called from systemd, expecting it to never return
+  # Get the frecuency from the args, or use the env variable, or use the default (60 seconds)
   if not hasattr(args, 'frequency'):
-    args.frequency = 60
+    args.frequency = int(os.getenv('SCAN_FREQUENCY', 60))
 
+  # This method should be called from systemd, expecting it to never return
   while True:
     print("Running reporter")
     reporter = Reporter()
