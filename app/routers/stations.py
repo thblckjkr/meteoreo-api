@@ -91,9 +91,9 @@ async def put_station(station: StationRequest.Schema):
   try:
     instance.register(station)
     stationModel.has_key = True
-  except:
+  except Exception as e:
     raise HTTPException(
-        status_code=422, detail="Unable to register the station")
+        status_code=422, detail="Unable to register the station, error: {}".format(e))
 
   # Store the station in the database
   try:
