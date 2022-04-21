@@ -1,4 +1,4 @@
-"""Events-fix Migration."""
+"""EventsFix Migration."""
 
 from masoniteorm.migrations import Migration
 
