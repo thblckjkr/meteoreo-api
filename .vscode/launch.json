@@ -3,7 +3,7 @@
       "name": "Debug meteoreo scan",
       "type": "python",
       "request": "launch",
-      "program": "meteoreo.py",
+      "program": "meteoreo",
       "args": [
         "--scan"
       ],
