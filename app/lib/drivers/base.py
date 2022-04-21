@@ -187,7 +187,7 @@ class BaseDriver():
                 'action': name,
                 'stdout': stdout,
                 'stderr': stderr,
-                'description': action['description'],
+                'description': action['description'] if 'description' in action else 'No hay descripción',
                 'solution': action['solution'],
                 'command': action['command'] if 'command' in action else None,
                 'path': f'%s.actions.%s' % (service, name)
