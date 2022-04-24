@@ -70,7 +70,9 @@ if not args.scan and not args.report:
 if args.scan:
   # Get the frecuency from the args, or use the env variable, or use the default (60 seconds)
   if not hasattr(args, 'frequency'):
-    args.frequency = int(os.getenv('SCAN_FREQUENCY', 60))
+    scan_frequency = int(os.getenv('SCAN_FREQUENCY', 60))
+  else:
+    scan_frequency = args.frequency
 
   # This method should be called from systemd, expecting it to never return
   while True:
@@ -78,8 +80,8 @@ if args.scan:
     reporter = Reporter()
     reporter.routine()
 
-    print("Done. Sleeping for {0} seconds".format(args.frecuecy))
-    time.sleep(args.frequency)
+    print("Done. Sleeping for {0} seconds".format(scan_frecuecy))
+    time.sleep(scan_frequency)
 
 if args.report:
   import lib.drivers.davis
