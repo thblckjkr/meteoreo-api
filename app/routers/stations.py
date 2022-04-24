@@ -6,7 +6,7 @@ from uuid import UUID
 
 from ..models.Station import Station
 from ..requests import StationRequest
-from ..lib.reporter import Bridge
+from ..lib.reporter import Bridge, StationReporter
 
 security = HTTPBasic()
 
@@ -29,8 +29,10 @@ def read_stations(credentials: HTTPBasicCredentials = Depends(security)):
   """
   stations = Station.all()
 
+  # Include each station incidents and solved incidents
   for station in stations:
     station.incidents = station.events.serialize()
+    # station.solved_incidents = station.events(all=True).serialize()
 
   return {
       "stations": stations.serialize()
@@ -127,3 +129,26 @@ def post_station(uuid: str, station: StationRequest.Schema):
   station = Station.get(uuid=uuid)
   station.update(**station.dict())
   return station.serialize()
+
+@router.post("/{uuid}/solve")
+def solve_incident(uuid: str, incident_path: str):
+  """
+  Solves an incident for a specific station
+  """
+  station = Station.find(uuid)
+
+  # Create a instance of the driver
+  reporter = StationReporter(station)
+
+  # Tries to solve the incident
+  try:
+    fix = reporter.fix(incident_path)
+  except:
+    raise HTTPException(
+        status_code=422, detail="Unable to connect to the station")
+
+  if fix.status == "success":
+    return {"message": "Incident solved"}
+  else:
+    raise HTTPException(
+        status_code=422, detail="Unable to solve the incident {}".format(fix.message))

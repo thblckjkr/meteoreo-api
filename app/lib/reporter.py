@@ -151,7 +151,6 @@ class Reporter:
     """
     return Station.get()
 
-
 class StationReporter:
 
   def __init__(self, station):
@@ -168,6 +167,7 @@ class StationReporter:
       # This is not a problem, so we just log it and move on
       logger.error("Error loading driver: %s", str(e))
       self.generate_event("driver_error")
+
 
   def generate_station_status(self):
     """Loads the driver and get the status of the station, generates an event if neccessary.
@@ -205,8 +205,46 @@ class StationReporter:
     # Solve events that were not present in the scan.
     self.solve_events(problems, "service_error")
 
-    # logger.warning('The station %s using the driver %s was correctly scanned',
-    #                self.station.name, self.station.driver)
+  def fix_event(self, path):
+    """Fixes an event
+
+    This method fixes an event by setting the status to fixed and the path to the solution
+
+    Args:
+        path (str): Path to the solution
+    """
+    try:
+      self.driver.connect()
+      problems = self.driver.fix(path)
+    except NetworkError as e:
+      logger.warning(
+          "There was a connection error to the station %s", self.station.name)
+      self.generate_event("network_error")
+      self.solve_events(None, "network_error")
+      return  # If the network is down, we can't get the status, so we just return and end the function
+
+    except Exception as e:
+      # Fatal error that isn't a network error
+      logger.error(
+          "There was an error while getting the status of the station %s: %s", self.station.name, str(e))
+      self.generate_event("driver_error")
+      self.solve_events(None, "driver_error")
+      return # If there is a driver error, there is no way we can have a status
+
+    # Check the contents of status, to see if there were any errors, and send the errors to the generator
+    if problems is not None:
+      for problem in problems:
+        self.generate_event("service_error", problem)
+
+    # Solve events that were not present in the scan.
+    self.solve_events(problems, "service_error")
+
+
+
+    # Notify the user
+    NotificationProvider.send_notification(
+        station.user_uuid, "Event fixed", "The event has been fixed")
+
 
   def generate_event(self, error, data=None):
     """ Generates an event for the station
