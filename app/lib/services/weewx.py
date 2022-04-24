@@ -22,6 +22,7 @@ service = {
                         "description": "No tenemos conexión para limpiar la memoria de la estación",
                         "solution": "Restart serial connection",
                         "response_stdout": "OSError: [Errno 11] Resource temporarily unavailable",
+                        "response_stderr": None,
                         "command": "sudo systemctl stop serial-getty@ttyS0.service"
                 }
             }
