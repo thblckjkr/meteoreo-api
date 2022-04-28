@@ -9,7 +9,6 @@ DRIVERS_LIST = [ 'RpiDavisStation' ]
 
 DEFAULT_SERVICES_MAP = {
     "mysql": mysql.service,
-
     "weewx": weewx.service,
     "RoPi": ropi.service,
 }
@@ -20,6 +19,6 @@ class RpiDavisStation(BaseDriver):
     services_map = DEFAULT_SERVICES_MAP
 
     # Refresh time on every instantiation
-    services_map['time'] = time.service
+    services_map['time'] = time.service()
 
     return super().__init__(station, services_map)

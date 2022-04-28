@@ -9,7 +9,6 @@ DRIVERS_LIST = [ 'RpiCampbellStation' ]
 
 DEFAULT_SERVICES_MAP = {
     "mysql": mysql.service,
-    "time": time.service,
     "weewx": weewx.service,
     "RoPi": ropi.service,
     "proxy": proxy.service,
@@ -50,7 +49,7 @@ class RpiCampbellStation(BaseDriver):
     ).service()
 
     # Refresh time on every instantiation
-    services_map['time'] = time.service
+    services_map['time'] = time.service()
 
     return super().__init__(station, services_map)
 
