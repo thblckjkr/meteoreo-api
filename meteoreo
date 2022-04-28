@@ -47,8 +47,15 @@ formatter = logging.Formatter(
     # "%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s"
 )
 
+if args.debug:
+  logging_level = logging.DEBUG
+elif args.verbose:
+  logging_level = logging.INFO
+else:
+  logging_level = logging.WARNING
+
 logging.basicConfig(
-    level=logging.WARNING if not args.verbose else logging.INFO if args.debug else logging.DEBUG
+    level=logging_level
 )
 
 rootLogger = logging.getLogger()
