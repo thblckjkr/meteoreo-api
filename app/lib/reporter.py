@@ -215,7 +215,7 @@ class StationReporter:
     """
     try:
       self.driver.connect()
-      problems = self.driver.fix(path)
+      status = self.driver.fix(path)
     except NetworkError as e:
       logger.warning(
           "There was a connection error to the station %s", self.station.name)
@@ -226,25 +226,26 @@ class StationReporter:
     except Exception as e:
       # Fatal error that isn't a network error
       logger.error(
-          "There was an error while getting the status of the station %s: %s", self.station.name, str(e))
+          "There was an error while solving the error %s: %s", self.station.name, str(e))
       self.generate_event("driver_error")
       self.solve_events(None, "driver_error")
       return # If there is a driver error, there is no way we can have a status
 
     # Check the contents of status, to see if there were any errors, and send the errors to the generator
-    if problems is not None:
-      for problem in problems:
-        self.generate_event("service_error", problem)
+    if status is None:
+      raise Exception("Status is None")
+
+    if status['status'] == "error":
+      self.generate_event("service_error", status['problem'])
 
     # Solve events that were not present in the scan.
-    self.solve_events(problems, "service_error")
-
-
+    #TODO: This makes all events solved, except for the one that was almost solved.
+    self.solve_events(status.get('problem'), "service_error")
 
     # Notify the user
-    NotificationProvider.send_notification(
-        station.user_uuid, "Event fixed", "The event has been fixed")
+    #TODO: Notify the user
 
+    return status
 
   def generate_event(self, error, data=None):
     """ Generates an event for the station

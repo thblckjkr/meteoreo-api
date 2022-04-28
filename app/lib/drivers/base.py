@@ -169,6 +169,7 @@ class BaseDriver():
 
     # Runs the services check, we need to just recurse the first level
     # This can be changed to a recursive function.
+    #TODO: Only check for the services that are in the services_map and the station services array
     for service, operations in self.services_map.items():
       status = None
       [ stdout, stderr ] = self.executor.run(operations['command'])

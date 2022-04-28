@@ -142,13 +142,9 @@ def solve_incident(uuid: str, incident_path: str):
 
   # Tries to solve the incident
   try:
-    fix = reporter.fix(incident_path)
-  except:
+    status = reporter.fix_event(incident_path)
+  except Exception as e:
     raise HTTPException(
         status_code=422, detail="Unable to connect to the station")
 
-  if fix.status == "success":
-    return {"message": "Incident solved"}
-  else:
-    raise HTTPException(
-        status_code=422, detail="Unable to solve the incident {}".format(fix.message))
+  return status
