@@ -1,10 +1,16 @@
 import time
 
-# Checks the time (station time is important)
+# Checks the time (station time is important, to preserve data consistency
+
+# Get's and compares the datetime against the current time in bash
+command = 'TARGET=$(date -d {0} +%s); CURRENT=$(date +%s); MINUTES=$(( ($TARGET - $CURRENT) / 60 ));'.format(int(time.time()))
+
+# Checks if the obtained minutes is greater than 15 minutes, prints true if it is.
+command += 'if [ $MINUTES -gt 15 ]; then echo "true $MINUTES"; else echo "false"; fi'
+
 service = {
-    "command": "date '+%s'",
-    # Hack to get the time near +- 16 minutes of when the time was asked
-    "stdout": str(int(int(time.time()) / 1000)),
+    "command": command,
+    "stdout": "false",
     "stderr": None,
 
     "actions": {
