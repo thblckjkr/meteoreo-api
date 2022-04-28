@@ -176,8 +176,8 @@ class BaseDriver():
 
       # Checks if the stdout and stderr matches the operations stdout and stderr.
       # If the operations are None, we check if the stdout and stderr length is 0
-      if ((operations['stdout'] is None and stdout == '') or operations['stdout'] in stdout) and \
-          ((operations['stderr'] is None and stderr == '') or operations['stderr'] in stderr):
+      if ((operations['stdout'] is None and stdout == '') or (operations['stdout'] is not None and operations['stdout'] in stdout) ) and \
+          ((operations['stderr'] is None and stderr == '') or ( operations['stderr'] is not None and operations['stderr'] in stderr)):
           self.logger.info("The service %s is running correctly" % service)
           self.logger.info("command: %s" % operations['command'])
           self.logger.info("stdout: %s" % stdout)
@@ -187,8 +187,8 @@ class BaseDriver():
       else:
         # Check in the array of operations actions, and check if the stderr matches one of them
         for name, action in operations['actions'].items():
-          if ((action['response_stdout'] is None and stdout == '') or action['response_stdout'] in stdout) and \
-              ((action['response_stderr'] is None and stderr == '') or action['response_stderr'] in stderr):
+          if ((action['response_stdout'] is None and stdout == '') or (action['response_stdout'] is not None and action['response_stdout'] in stdout) ) and \
+            ((action['response_stderr'] is None and stderr == '') or ( action['response_stderr'] is not None and action['response_stderr'] in stderr)):
             # If the stderr matches, we add the action to the problems
             status = {
                 'service': service,
@@ -234,8 +234,8 @@ class BaseDriver():
     # Executes the command
     [stdout, stderr] = self.executor.run(command)
 
-    if ((main_action['stdout'] is None and stdout == '') or main_action['stdout'] in stdout) and \
-      ((main_action['stderr'] is None and stderr == '') or main_action['stderr'] in stderr):
+    if ((main_action['stdout'] is None and stdout == '') or (main_action['stdout'] is not None and main_action['stdout'] in stdout) ) and \
+        ((main_action['stderr'] is None and stderr == '') or ( main_action['stderr'] is not None and main_action['stderr'] in stderr)):
       return {
             'status': 'success',
             'stdout': stdout,
@@ -244,8 +244,8 @@ class BaseDriver():
 
     # Checks for the current stdout on the actions dictionary
     for name, action in main_action['actions'].items():
-      if ((action['response_stdout'] is None and stdout == '') or action['response_stdout'] in stdout) and \
-        ((action['response_stderr'] is None and stderr == '') or action['response_stderr'] in stderr):
+      if ((action['response_stdout'] is None and stdout == '') or (action['response_stdout'] is not None and action['response_stdout'] in stdout) ) and \
+        ((action['response_stderr'] is None and stderr == '') or ( action['response_stderr'] is not None and action['response_stderr'] in stderr)):
           # If the stderr matches, we add the action to the problems
             return {
               'status': 'error',
