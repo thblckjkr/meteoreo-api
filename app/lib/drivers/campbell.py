@@ -49,6 +49,9 @@ class RpiCampbellStation(BaseDriver):
       campbell_table
     ).service()
 
+    # Refresh time on every instantiation
+    services_map['time'] = time.service
+
     return super().__init__(station, services_map)
 
 # Example of the command generated
