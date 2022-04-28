@@ -83,7 +83,7 @@ if args.scan:
 
   # This method should be called from systemd, expecting it to never return
   while True:
-    print("Running reporter")
+    print("Running reporter every {0} seconds".format(scan_frequency))
     reporter = Reporter()
     reporter.routine()
 
