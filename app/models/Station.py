@@ -10,7 +10,10 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
   """Station Model"""
   # Station model configuration
   __uuid_version__ = 4
-  __appends__ = ["ip_address"]
+  __appends__ = [
+    "ip_address",
+    "extra_data"
+  ]
 
   __hidden__ = ["created_at", "updated_at", "deleted_at"]
 
@@ -35,3 +38,8 @@ class Station(Model, UUIDPrimaryKeyMixin, SoftDeletesMixin):
       return StationEvent
 
     return StationEvent.unresolved()
+
+  @has_many("id", "station_id")
+  def extra_data(self):
+    from app.models.StationAdditional import StationAdditional
+    return StationAdditional
