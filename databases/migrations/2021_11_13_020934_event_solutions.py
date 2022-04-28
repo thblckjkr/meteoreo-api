@@ -24,5 +24,3 @@ class EventSolutions(Migration):
       table.drop_column("solution")
       table.drop_column("solved_by")
       table.drop_column("solved_at")
-      pass
-    pass

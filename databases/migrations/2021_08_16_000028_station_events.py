@@ -22,6 +22,9 @@ class StationEvents(Migration):
       table.soft_deletes()
       table.timestamps()
 
+      # Relation with the station_id
+      table.add_foreign('station_id.id.stations')
+
   def down(self):
     """
     Revert the migrations.

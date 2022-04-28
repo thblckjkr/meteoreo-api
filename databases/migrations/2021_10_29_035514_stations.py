@@ -17,5 +17,3 @@ class Stations(Migration):
     """
     with self.schema.table("stations") as table:
       table.drop_column("last_scan")
-      pass
-    pass

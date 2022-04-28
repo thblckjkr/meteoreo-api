@@ -13,13 +13,15 @@ class NormalizeEventsComments(Migration):
       table.string("comment", nullable=True)
       table.string("solution", nullable=True)
       table.string("solved_by", length=16, nullable=True)
-      table.integer("station_event_id")
+      table.integer("station_event_id").unsigned()
       table.uuid("station_id") # Denormalized, sacrifice performance for simplicity
       table.timestamp("solved_at")
-      pass
+
+      table.add_foreign('station_id.id.stations')
+      table.add_foreign('station_event_id.id.station_events')
 
     with self.schema.table("station_events") as table:
-      table.integer("event_solution_id")
+      table.integer("event_solution_id").unsigned()
     #   table.drop_column("comment")
     #   table.drop_column("solution")
     #   table.drop_column("solved_by")
@@ -32,6 +34,9 @@ class NormalizeEventsComments(Migration):
     Revert the migrations.
     """
     with self.schema.table("station_events") as table:
+      table.drop_foreign('station_id.id.stations')
+      table.drop_foreign('station_event_id.id.station_events')
+
       table.string("comment", nullable=True)
       table.string("solution", nullable=True)
       table.string("solved_by", length=16, nullable=True)

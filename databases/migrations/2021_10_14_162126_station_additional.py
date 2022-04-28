@@ -15,6 +15,9 @@ class StationAdditional(Migration):
       table.uuid("station_id")
 
       table.timestamps()
+      table.soft_deletes()
+
+      table.add_foreign('station_id.id.stations')
 
   def down(self):
     """
