@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='Meteo scanner & reporter')
 parser.add_argument(
     '--scan', '-s', help='Scans the given station to force the genreation of a incident if necessary', action='store_true')
 parser.add_argument(
-    '--frecuecy', '-f', help='Frecuency of the scan in seconds', type=int)
+    '--frecuency', '-f', help='Frecuency of the scan in seconds', type=int)
 parser.add_argument(
     '--report', '-r', help='Report via CLI the status of a given station', type=str, default=None)
 parser.add_argument(
@@ -87,7 +87,7 @@ if args.scan:
     reporter = Reporter()
     reporter.routine()
 
-    print("Done. Sleeping for {0} seconds".format(scan_frecuecy))
+    print("Done. Sleeping for {0} seconds".format(scan_frequency))
     time.sleep(scan_frequency)
 
 if args.report:
