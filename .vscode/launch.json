@@ -5,7 +5,8 @@
       "request": "launch",
       "program": "meteoreo",
       "args": [
-        "--scan"
+        "--scan",
+        "--verbose"
       ],
       "console": "integratedTerminal",
       "env": {
