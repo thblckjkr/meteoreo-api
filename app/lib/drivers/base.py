@@ -20,6 +20,7 @@ import socket
 import os
 import subprocess
 import time
+import logging
 
 # Ejecutor por defecto
 DRIVER_EXECUTOR = 'SSH'
@@ -35,6 +36,8 @@ def get_element(element, array):
 class BaseDriver():
 
   def __init__(self, station, services_map=None):
+    self.logger = logging.getLogger(__name__)
+
     self.services_map = services_map or DEFAULT_SERVICES_MAP
     self.hostname = station.ip_address
     self.port = station.port
@@ -174,6 +177,10 @@ class BaseDriver():
       # If the operations are None, we check if the stdout and stderr length is 0
       if ((operations['stdout'] is None and stdout == '') or operations['stdout'] in stdout) and \
           ((operations['stderr'] is None and stderr == '') or operations['stderr'] in stderr):
+          self.logger.info("The service %s is running correctly" % service)
+          self.logger.info("command: %s" % operations['command'])
+          self.logger.info("stdout: %s" % stdout)
+          self.logger.info("stderr: %s" % stderr)
           continue
           # If the service is OK, we pass
       else:
