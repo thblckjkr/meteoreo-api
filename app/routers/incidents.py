@@ -18,6 +18,7 @@ def get_incidents():
 
   for incident in incidents:
     incident.station = incident.station.serialize()
+    incident.solutions = incident.solutions.serialize()
 
   return incidents.serialize()
 
