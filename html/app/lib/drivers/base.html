@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>app.lib.drivers.base API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>app.lib.drivers.base</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># coding: utf-8
+#
+# This drivers aims to be a simple way to recolect data of a davis station
+# connected to a RaspberryPi, runnning a local MySQL database for the
+# long-term storage of information, and WeeeWX as the main data recolector.
+#
+# This program is intended to be able to run directly on the station, with
+# a local executor or via SSH from a remote server.
+#
+# Everything is intended to be run on a command line.
+#
+# @author: Teo Gonzalez Calzada [@thblckjkr]
+
+# from pydantic import BaseModel
+# from fastapi import Query
+
+from ..Executor.ExecutorFactory import ExecutorFactory
+from ..Exceptions.Generic import *
+import socket
+import os
+import subprocess
+import time
+import logging
+
+# Ejecutor por defecto
+DRIVER_EXECUTOR = &#39;SSH&#39;
+
+def get_element(element, array):
+  keys = element.split(&#39;.&#39;)
+  rv = array
+  for key in keys:
+    rv = rv[key]
+  return rv
+
+
+class BaseDriver():
+
+  def __init__(self, station, services_map=None):
+    self.logger = logging.getLogger(__name__)
+
+    self.services_map = services_map or DEFAULT_SERVICES_MAP
+    self.hostname = station.ip_address
+    self.port = station.port
+    self.username = station.username
+
+    # If the station has the password attribute, we store in itself
+    if hasattr(station, &#39;password&#39;):
+      self.password = station.password
+
+    if station.has_key:
+      self.registered = station.has_key
+
+  # Gets the services available to search in the station
+  def get_services(self):
+    dictionary = self.services_map.keys()
+    return list(dictionary)
+
+  # Connnect to the station via the SSH executor
+  def connect(self):
+    # # Checks if the station has the key registered, if not, register the key
+    # if not self.registered and DRIVER_EXECUTOR == &#39;SSH&#39;:
+    #   self.register(self.password)
+
+    factory = ExecutorFactory()
+    factory.register(DRIVER_EXECUTOR)
+    self.executor = factory.create_executor(
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username)
+
+  def register(self, data):
+    password = data.password
+    if DRIVER_EXECUTOR != &#39;SSH&#39;:
+      return
+
+    factory = ExecutorFactory()
+    factory.register(DRIVER_EXECUTOR)
+    self.executor = factory.create_executor(
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=password)
+
+    # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+
+    # Enables writing to the station via remountrw (because the file system is read-only)
+    # Check ReadOnlyRoot Pi (https://github.com/glennmckechnie/rorpi-raspberrypi) for more info
+    [stdout, stderr] = self.executor.run(&#39;sudo remountrw&#39;)
+    if stderr != &#39;&#39;:
+      raise Exception(&#34;Error enabling read-write mode&#34;)
+
+    # Assumes get_status was previously called and the station is available
+    # Creates the authorized_keys file
+    self.executor.run(&#34;mkdir -p ~/.ssh&#34;)
+    [stdout, stderr] = self.executor.run(&#34;touch ~/.ssh/authorized_keys&#34;)
+    if(stderr != &#34;&#34;):
+      raise Exception(&#34;Error touching authorized_keys file: %s&#34; % stderr)
+
+    # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+    with open(&#34;/app/private_key.pem.pub&#34;, &#34;r&#34;) as f:
+      key = f.read()
+      [stdout, stderr] = self.executor.run(
+          &#34;echo &#39;%s&#39; &gt;&gt; ~/.ssh/authorized_keys&#34; % key)
+      if(stderr != &#34;&#34;):
+        raise Exception(&#34;Error adding key to authorized_keys file&#34;)
+
+    # Restarts the SSH service
+    [stdout, stderr] = self.executor.run(&#34;sudo systemctl reload sshd&#34;)
+    if stderr != &#34;&#34;:
+      raise Exception(&#34;Error reloading SSH daemon&#34;)
+
+    [stdout, stderr] = self.executor.run(&#39;sudo remountro&#39;)
+    if stderr != &#34;&#34;:
+      raise Exception(&#34;Error disabling read-only mode&#34;)
+
+    # Checks if the station has the key registered, if not, register the key
+    self.registered = True
+
+    return True
+
+  def get_status(self):
+    &#34;&#34;&#34;Get status of the station
+
+    Tries to get the status before connecting to the station
+    to check if it is available.
+
+    We do not trust in paramiko SSH exceptions because the error is too generic
+
+    Returns:
+        bool: True if the station is available
+    Raises:
+        PortConnectionError: If the port (to do SSH) is not available
+    &#34;&#34;&#34;
+
+    # If the connection driver is not SSH, we can&#39;t check the connection status
+    if DRIVER_EXECUTOR != &#39;SSH&#39;:
+      return True
+
+    # Do a ping to the station
+    # Using subprocess.run instead of os.system because it does not output the stdout to the console
+    command = [&#39;ping&#39;, &#39;-c&#39;, &#39;1&#39;, self.hostname]
+    if subprocess.run(command, stdout=subprocess.PIPE).returncode != 0:
+      raise IPConnectionError(
+          &#34;The station with the IP %s is not available&#34; % self.hostname)
+
+    # Creates a socket to check if the SSH port is accessible
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex((self.hostname, self.port))
+    if result == 0:
+      sock.close()
+      return True
+    else:
+      raise PortConnectionError(
+          &#34;The port %d of the IP %s is not reachable&#34; % (self.port, self.hostname))
+
+    # By default, the station is not available
+    return False
+
+  def scan(self):
+    &#34;&#34;&#34;Scans the station and gets the status of the services available on the station
+
+    Returns:
+        dict: A dictionary with the problems, or None if everything is ok
+    &#34;&#34;&#34;
+
+    # Initialize an empty array to store the services problems
+    problems = []
+
+    # Gets the status first
+
+    if not self.get_status():
+      # Somehow, the station is not available but didn&#39;t raise an exception
+      raise NetworkError(&#34;The station is not available&#34;)
+
+    # Runs the services check, we need to just recurse the first level
+    # This can be changed to a recursive function.
+    #TODO: Only check for the services that are in the services_map and the station services array
+    for service, operations in self.services_map.items():
+      status = None
+      [ stdout, stderr ] = self.executor.run(operations[&#39;command&#39;])
+
+      # Checks if the stdout and stderr matches the operations stdout and stderr.
+      # If the operations are None, we check if the stdout and stderr length is 0
+      if ((operations[&#39;stdout&#39;] is None and stdout == &#39;&#39;) or (operations[&#39;stdout&#39;] is not None and operations[&#39;stdout&#39;] in stdout) ) and \
+          ((operations[&#39;stderr&#39;] is None and stderr == &#39;&#39;) or ( operations[&#39;stderr&#39;] is not None and operations[&#39;stderr&#39;] in stderr)):
+          self.logger.info(&#34;The service %s is running correctly&#34; % service)
+          self.logger.info(&#34;command: %s&#34; % operations[&#39;command&#39;])
+          self.logger.info(&#34;stdout: %s&#34; % stdout)
+          self.logger.info(&#34;stderr: %s&#34; % stderr)
+          continue
+          # If the service is OK, we pass
+      else:
+        # Check in the array of operations actions, and check if the stderr matches one of them
+        for name, action in operations[&#39;actions&#39;].items():
+          if ((action[&#39;response_stdout&#39;] is None and stdout == &#39;&#39;) or (action[&#39;response_stdout&#39;] is not None and action[&#39;response_stdout&#39;] in stdout) ) and \
+            ((action[&#39;response_stderr&#39;] is None and stderr == &#39;&#39;) or ( action[&#39;response_stderr&#39;] is not None and action[&#39;response_stderr&#39;] in stderr)):
+            # If the stderr matches, we add the action to the problems
+            status = {
+                &#39;service&#39;: service,
+                &#39;action&#39;: name,
+                &#39;stdout&#39;: stdout,
+                &#39;stderr&#39;: stderr,
+                &#39;description&#39;: action[&#39;description&#39;] if &#39;description&#39; in action else &#39;No hay descripción&#39;,
+                &#39;solution&#39;: action[&#39;solution&#39;] if &#39;solution&#39; in action else &#39;No hay solución&#39;,
+                &#39;command&#39;: action[&#39;command&#39;] if &#39;command&#39; in action else None,
+                &#39;path&#39;: f&#39;%s.actions.%s&#39; % (service, name)
+            }
+            break
+
+        # If the stderr does not match any action, we add the service to the problems
+        if status is None:
+          status = {
+              &#39;service&#39;: service,
+              &#39;stdout&#39;: stdout,
+              &#39;stderr&#39;: stderr,
+              &#39;description&#39;: None,
+              &#39;solution&#39;: None,
+              &#39;command&#39;: None,
+              &#39;path&#39;: f&#39;%s.actions&#39; % service
+          }
+
+        problems.append(status)
+
+    return None if len(problems) == 0 else problems
+
+  def fix(self, path):
+    &#34;&#34;&#34;Fixes a problem on the station
+
+    Args:
+        path (str): The path of the problem to be fixed
+    &#34;&#34;&#34;
+
+    # Gets the action to be performed from the path
+    main_action = get_element(path, self.services_map)
+
+    # Gets the command to execute
+    command = main_action[&#39;command&#39;]
+
+    # Executes the command
+    [stdout, stderr] = self.executor.run(command)
+
+    if ((main_action[&#39;stdout&#39;] is None and stdout == &#39;&#39;) or (main_action[&#39;stdout&#39;] is not None and main_action[&#39;stdout&#39;] in stdout) ) and \
+        ((main_action[&#39;stderr&#39;] is None and stderr == &#39;&#39;) or ( main_action[&#39;stderr&#39;] is not None and main_action[&#39;stderr&#39;] in stderr)):
+      return {
+            &#39;status&#39;: &#39;success&#39;,
+            &#39;stdout&#39;: stdout,
+            &#39;stderr&#39;: stderr
+        }
+
+    # Checks for the current stdout on the actions dictionary
+    for name, action in main_action[&#39;actions&#39;].items():
+      if ((action[&#39;response_stdout&#39;] is None and stdout == &#39;&#39;) or (action[&#39;response_stdout&#39;] is not None and action[&#39;response_stdout&#39;] in stdout) ) and \
+        ((action[&#39;response_stderr&#39;] is None and stderr == &#39;&#39;) or ( action[&#39;response_stderr&#39;] is not None and action[&#39;response_stderr&#39;] in stderr)):
+          # If the stderr matches, we add the action to the problems
+            return {
+              &#39;status&#39;: &#39;error&#39;,
+              &#39;problem&#39;: {
+                  &#39;service&#39;: service,
+                  &#39;action&#39;: name,
+                  &#39;stdout&#39;: stdout,
+                  &#39;stderr&#39;: stderr,
+                  &#39;description&#39;: action[&#39;description&#39;] if &#39;description&#39; in action else &#39;No hay descripción&#39;,
+                  &#39;solution&#39;: action[&#39;solution&#39;] if &#39;solution&#39; in action else &#39;No hay solución&#39;,
+                  &#39;command&#39;: action[&#39;command&#39;] if &#39;command&#39; in action else None,
+                  &#39;path&#39;: f&#39;%s.actions.%s&#39; % (service, name)
+              }
+            }
+
+    # If the stderr does not match any action, we return the raw response
+      status = {
+        &#39;status&#39;: &#39;error&#39;,
+        &#39;problem&#39;: {
+          &#39;service&#39;: service,
+          &#39;stdout&#39;: stdout,
+          &#39;stderr&#39;: stderr,
+          &#39;description&#39;: None,
+          &#39;solution&#39;: None,
+          &#39;command&#39;: None,
+          &#39;path&#39;: f&#39;%s.actions&#39; % service
+        }
+      }
+
+# Todo what if the action do not have actions or a command?</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="app.lib.drivers.base.get_element"><code class="name flex">
+<span>def <span class="ident">get_element</span></span>(<span>element, array)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_element(element, array):
+  keys = element.split(&#39;.&#39;)
+  rv = array
+  for key in keys:
+    rv = rv[key]
+  return rv</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="app.lib.drivers.base.BaseDriver"><code class="flex name class">
+<span>class <span class="ident">BaseDriver</span></span>
+<span>(</span><span>station, services_map=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BaseDriver():
+
+  def __init__(self, station, services_map=None):
+    self.logger = logging.getLogger(__name__)
+
+    self.services_map = services_map or DEFAULT_SERVICES_MAP
+    self.hostname = station.ip_address
+    self.port = station.port
+    self.username = station.username
+
+    # If the station has the password attribute, we store in itself
+    if hasattr(station, &#39;password&#39;):
+      self.password = station.password
+
+    if station.has_key:
+      self.registered = station.has_key
+
+  # Gets the services available to search in the station
+  def get_services(self):
+    dictionary = self.services_map.keys()
+    return list(dictionary)
+
+  # Connnect to the station via the SSH executor
+  def connect(self):
+    # # Checks if the station has the key registered, if not, register the key
+    # if not self.registered and DRIVER_EXECUTOR == &#39;SSH&#39;:
+    #   self.register(self.password)
+
+    factory = ExecutorFactory()
+    factory.register(DRIVER_EXECUTOR)
+    self.executor = factory.create_executor(
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username)
+
+  def register(self, data):
+    password = data.password
+    if DRIVER_EXECUTOR != &#39;SSH&#39;:
+      return
+
+    factory = ExecutorFactory()
+    factory.register(DRIVER_EXECUTOR)
+    self.executor = factory.create_executor(
+        DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=password)
+
+    # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+
+    # Enables writing to the station via remountrw (because the file system is read-only)
+    # Check ReadOnlyRoot Pi (https://github.com/glennmckechnie/rorpi-raspberrypi) for more info
+    [stdout, stderr] = self.executor.run(&#39;sudo remountrw&#39;)
+    if stderr != &#39;&#39;:
+      raise Exception(&#34;Error enabling read-write mode&#34;)
+
+    # Assumes get_status was previously called and the station is available
+    # Creates the authorized_keys file
+    self.executor.run(&#34;mkdir -p ~/.ssh&#34;)
+    [stdout, stderr] = self.executor.run(&#34;touch ~/.ssh/authorized_keys&#34;)
+    if(stderr != &#34;&#34;):
+      raise Exception(&#34;Error touching authorized_keys file: %s&#34; % stderr)
+
+    # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+    with open(&#34;/app/private_key.pem.pub&#34;, &#34;r&#34;) as f:
+      key = f.read()
+      [stdout, stderr] = self.executor.run(
+          &#34;echo &#39;%s&#39; &gt;&gt; ~/.ssh/authorized_keys&#34; % key)
+      if(stderr != &#34;&#34;):
+        raise Exception(&#34;Error adding key to authorized_keys file&#34;)
+
+    # Restarts the SSH service
+    [stdout, stderr] = self.executor.run(&#34;sudo systemctl reload sshd&#34;)
+    if stderr != &#34;&#34;:
+      raise Exception(&#34;Error reloading SSH daemon&#34;)
+
+    [stdout, stderr] = self.executor.run(&#39;sudo remountro&#39;)
+    if stderr != &#34;&#34;:
+      raise Exception(&#34;Error disabling read-only mode&#34;)
+
+    # Checks if the station has the key registered, if not, register the key
+    self.registered = True
+
+    return True
+
+  def get_status(self):
+    &#34;&#34;&#34;Get status of the station
+
+    Tries to get the status before connecting to the station
+    to check if it is available.
+
+    We do not trust in paramiko SSH exceptions because the error is too generic
+
+    Returns:
+        bool: True if the station is available
+    Raises:
+        PortConnectionError: If the port (to do SSH) is not available
+    &#34;&#34;&#34;
+
+    # If the connection driver is not SSH, we can&#39;t check the connection status
+    if DRIVER_EXECUTOR != &#39;SSH&#39;:
+      return True
+
+    # Do a ping to the station
+    # Using subprocess.run instead of os.system because it does not output the stdout to the console
+    command = [&#39;ping&#39;, &#39;-c&#39;, &#39;1&#39;, self.hostname]
+    if subprocess.run(command, stdout=subprocess.PIPE).returncode != 0:
+      raise IPConnectionError(
+          &#34;The station with the IP %s is not available&#34; % self.hostname)
+
+    # Creates a socket to check if the SSH port is accessible
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex((self.hostname, self.port))
+    if result == 0:
+      sock.close()
+      return True
+    else:
+      raise PortConnectionError(
+          &#34;The port %d of the IP %s is not reachable&#34; % (self.port, self.hostname))
+
+    # By default, the station is not available
+    return False
+
+  def scan(self):
+    &#34;&#34;&#34;Scans the station and gets the status of the services available on the station
+
+    Returns:
+        dict: A dictionary with the problems, or None if everything is ok
+    &#34;&#34;&#34;
+
+    # Initialize an empty array to store the services problems
+    problems = []
+
+    # Gets the status first
+
+    if not self.get_status():
+      # Somehow, the station is not available but didn&#39;t raise an exception
+      raise NetworkError(&#34;The station is not available&#34;)
+
+    # Runs the services check, we need to just recurse the first level
+    # This can be changed to a recursive function.
+    #TODO: Only check for the services that are in the services_map and the station services array
+    for service, operations in self.services_map.items():
+      status = None
+      [ stdout, stderr ] = self.executor.run(operations[&#39;command&#39;])
+
+      # Checks if the stdout and stderr matches the operations stdout and stderr.
+      # If the operations are None, we check if the stdout and stderr length is 0
+      if ((operations[&#39;stdout&#39;] is None and stdout == &#39;&#39;) or (operations[&#39;stdout&#39;] is not None and operations[&#39;stdout&#39;] in stdout) ) and \
+          ((operations[&#39;stderr&#39;] is None and stderr == &#39;&#39;) or ( operations[&#39;stderr&#39;] is not None and operations[&#39;stderr&#39;] in stderr)):
+          self.logger.info(&#34;The service %s is running correctly&#34; % service)
+          self.logger.info(&#34;command: %s&#34; % operations[&#39;command&#39;])
+          self.logger.info(&#34;stdout: %s&#34; % stdout)
+          self.logger.info(&#34;stderr: %s&#34; % stderr)
+          continue
+          # If the service is OK, we pass
+      else:
+        # Check in the array of operations actions, and check if the stderr matches one of them
+        for name, action in operations[&#39;actions&#39;].items():
+          if ((action[&#39;response_stdout&#39;] is None and stdout == &#39;&#39;) or (action[&#39;response_stdout&#39;] is not None and action[&#39;response_stdout&#39;] in stdout) ) and \
+            ((action[&#39;response_stderr&#39;] is None and stderr == &#39;&#39;) or ( action[&#39;response_stderr&#39;] is not None and action[&#39;response_stderr&#39;] in stderr)):
+            # If the stderr matches, we add the action to the problems
+            status = {
+                &#39;service&#39;: service,
+                &#39;action&#39;: name,
+                &#39;stdout&#39;: stdout,
+                &#39;stderr&#39;: stderr,
+                &#39;description&#39;: action[&#39;description&#39;] if &#39;description&#39; in action else &#39;No hay descripción&#39;,
+                &#39;solution&#39;: action[&#39;solution&#39;] if &#39;solution&#39; in action else &#39;No hay solución&#39;,
+                &#39;command&#39;: action[&#39;command&#39;] if &#39;command&#39; in action else None,
+                &#39;path&#39;: f&#39;%s.actions.%s&#39; % (service, name)
+            }
+            break
+
+        # If the stderr does not match any action, we add the service to the problems
+        if status is None:
+          status = {
+              &#39;service&#39;: service,
+              &#39;stdout&#39;: stdout,
+              &#39;stderr&#39;: stderr,
+              &#39;description&#39;: None,
+              &#39;solution&#39;: None,
+              &#39;command&#39;: None,
+              &#39;path&#39;: f&#39;%s.actions&#39; % service
+          }
+
+        problems.append(status)
+
+    return None if len(problems) == 0 else problems
+
+  def fix(self, path):
+    &#34;&#34;&#34;Fixes a problem on the station
+
+    Args:
+        path (str): The path of the problem to be fixed
+    &#34;&#34;&#34;
+
+    # Gets the action to be performed from the path
+    main_action = get_element(path, self.services_map)
+
+    # Gets the command to execute
+    command = main_action[&#39;command&#39;]
+
+    # Executes the command
+    [stdout, stderr] = self.executor.run(command)
+
+    if ((main_action[&#39;stdout&#39;] is None and stdout == &#39;&#39;) or (main_action[&#39;stdout&#39;] is not None and main_action[&#39;stdout&#39;] in stdout) ) and \
+        ((main_action[&#39;stderr&#39;] is None and stderr == &#39;&#39;) or ( main_action[&#39;stderr&#39;] is not None and main_action[&#39;stderr&#39;] in stderr)):
+      return {
+            &#39;status&#39;: &#39;success&#39;,
+            &#39;stdout&#39;: stdout,
+            &#39;stderr&#39;: stderr
+        }
+
+    # Checks for the current stdout on the actions dictionary
+    for name, action in main_action[&#39;actions&#39;].items():
+      if ((action[&#39;response_stdout&#39;] is None and stdout == &#39;&#39;) or (action[&#39;response_stdout&#39;] is not None and action[&#39;response_stdout&#39;] in stdout) ) and \
+        ((action[&#39;response_stderr&#39;] is None and stderr == &#39;&#39;) or ( action[&#39;response_stderr&#39;] is not None and action[&#39;response_stderr&#39;] in stderr)):
+          # If the stderr matches, we add the action to the problems
+            return {
+              &#39;status&#39;: &#39;error&#39;,
+              &#39;problem&#39;: {
+                  &#39;service&#39;: service,
+                  &#39;action&#39;: name,
+                  &#39;stdout&#39;: stdout,
+                  &#39;stderr&#39;: stderr,
+                  &#39;description&#39;: action[&#39;description&#39;] if &#39;description&#39; in action else &#39;No hay descripción&#39;,
+                  &#39;solution&#39;: action[&#39;solution&#39;] if &#39;solution&#39; in action else &#39;No hay solución&#39;,
+                  &#39;command&#39;: action[&#39;command&#39;] if &#39;command&#39; in action else None,
+                  &#39;path&#39;: f&#39;%s.actions.%s&#39; % (service, name)
+              }
+            }
+
+    # If the stderr does not match any action, we return the raw response
+      status = {
+        &#39;status&#39;: &#39;error&#39;,
+        &#39;problem&#39;: {
+          &#39;service&#39;: service,
+          &#39;stdout&#39;: stdout,
+          &#39;stderr&#39;: stderr,
+          &#39;description&#39;: None,
+          &#39;solution&#39;: None,
+          &#39;command&#39;: None,
+          &#39;path&#39;: f&#39;%s.actions&#39; % service
+        }
+      }</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="app.lib.drivers.campbell.RpiCampbellStation" href="campbell.html#app.lib.drivers.campbell.RpiCampbellStation">RpiCampbellStation</a></li>
+<li><a title="app.lib.drivers.davis.RpiDavisStation" href="davis.html#app.lib.drivers.davis.RpiDavisStation">RpiDavisStation</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="app.lib.drivers.base.BaseDriver.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self):
+  # # Checks if the station has the key registered, if not, register the key
+  # if not self.registered and DRIVER_EXECUTOR == &#39;SSH&#39;:
+  #   self.register(self.password)
+
+  factory = ExecutorFactory()
+  factory.register(DRIVER_EXECUTOR)
+  self.executor = factory.create_executor(
+      DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username)</code></pre>
+</details>
+</dd>
+<dt id="app.lib.drivers.base.BaseDriver.fix"><code class="name flex">
+<span>def <span class="ident">fix</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Fixes a problem on the station</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path of the problem to be fixed</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fix(self, path):
+  &#34;&#34;&#34;Fixes a problem on the station
+
+  Args:
+      path (str): The path of the problem to be fixed
+  &#34;&#34;&#34;
+
+  # Gets the action to be performed from the path
+  main_action = get_element(path, self.services_map)
+
+  # Gets the command to execute
+  command = main_action[&#39;command&#39;]
+
+  # Executes the command
+  [stdout, stderr] = self.executor.run(command)
+
+  if ((main_action[&#39;stdout&#39;] is None and stdout == &#39;&#39;) or (main_action[&#39;stdout&#39;] is not None and main_action[&#39;stdout&#39;] in stdout) ) and \
+      ((main_action[&#39;stderr&#39;] is None and stderr == &#39;&#39;) or ( main_action[&#39;stderr&#39;] is not None and main_action[&#39;stderr&#39;] in stderr)):
+    return {
+          &#39;status&#39;: &#39;success&#39;,
+          &#39;stdout&#39;: stdout,
+          &#39;stderr&#39;: stderr
+      }
+
+  # Checks for the current stdout on the actions dictionary
+  for name, action in main_action[&#39;actions&#39;].items():
+    if ((action[&#39;response_stdout&#39;] is None and stdout == &#39;&#39;) or (action[&#39;response_stdout&#39;] is not None and action[&#39;response_stdout&#39;] in stdout) ) and \
+      ((action[&#39;response_stderr&#39;] is None and stderr == &#39;&#39;) or ( action[&#39;response_stderr&#39;] is not None and action[&#39;response_stderr&#39;] in stderr)):
+        # If the stderr matches, we add the action to the problems
+          return {
+            &#39;status&#39;: &#39;error&#39;,
+            &#39;problem&#39;: {
+                &#39;service&#39;: service,
+                &#39;action&#39;: name,
+                &#39;stdout&#39;: stdout,
+                &#39;stderr&#39;: stderr,
+                &#39;description&#39;: action[&#39;description&#39;] if &#39;description&#39; in action else &#39;No hay descripción&#39;,
+                &#39;solution&#39;: action[&#39;solution&#39;] if &#39;solution&#39; in action else &#39;No hay solución&#39;,
+                &#39;command&#39;: action[&#39;command&#39;] if &#39;command&#39; in action else None,
+                &#39;path&#39;: f&#39;%s.actions.%s&#39; % (service, name)
+            }
+          }
+
+  # If the stderr does not match any action, we return the raw response
+    status = {
+      &#39;status&#39;: &#39;error&#39;,
+      &#39;problem&#39;: {
+        &#39;service&#39;: service,
+        &#39;stdout&#39;: stdout,
+        &#39;stderr&#39;: stderr,
+        &#39;description&#39;: None,
+        &#39;solution&#39;: None,
+        &#39;command&#39;: None,
+        &#39;path&#39;: f&#39;%s.actions&#39; % service
+      }
+    }</code></pre>
+</details>
+</dd>
+<dt id="app.lib.drivers.base.BaseDriver.get_services"><code class="name flex">
+<span>def <span class="ident">get_services</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_services(self):
+  dictionary = self.services_map.keys()
+  return list(dictionary)</code></pre>
+</details>
+</dd>
+<dt id="app.lib.drivers.base.BaseDriver.get_status"><code class="name flex">
+<span>def <span class="ident">get_status</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get status of the station</p>
+<p>Tries to get the status before connecting to the station
+to check if it is available.</p>
+<p>We do not trust in paramiko SSH exceptions because the error is too generic</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the station is available</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>PortConnectionError</code></dt>
+<dd>If the port (to do SSH) is not available</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_status(self):
+  &#34;&#34;&#34;Get status of the station
+
+  Tries to get the status before connecting to the station
+  to check if it is available.
+
+  We do not trust in paramiko SSH exceptions because the error is too generic
+
+  Returns:
+      bool: True if the station is available
+  Raises:
+      PortConnectionError: If the port (to do SSH) is not available
+  &#34;&#34;&#34;
+
+  # If the connection driver is not SSH, we can&#39;t check the connection status
+  if DRIVER_EXECUTOR != &#39;SSH&#39;:
+    return True
+
+  # Do a ping to the station
+  # Using subprocess.run instead of os.system because it does not output the stdout to the console
+  command = [&#39;ping&#39;, &#39;-c&#39;, &#39;1&#39;, self.hostname]
+  if subprocess.run(command, stdout=subprocess.PIPE).returncode != 0:
+    raise IPConnectionError(
+        &#34;The station with the IP %s is not available&#34; % self.hostname)
+
+  # Creates a socket to check if the SSH port is accessible
+  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  result = sock.connect_ex((self.hostname, self.port))
+  if result == 0:
+    sock.close()
+    return True
+  else:
+    raise PortConnectionError(
+        &#34;The port %d of the IP %s is not reachable&#34; % (self.port, self.hostname))
+
+  # By default, the station is not available
+  return False</code></pre>
+</details>
+</dd>
+<dt id="app.lib.drivers.base.BaseDriver.register"><code class="name flex">
+<span>def <span class="ident">register</span></span>(<span>self, data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register(self, data):
+  password = data.password
+  if DRIVER_EXECUTOR != &#39;SSH&#39;:
+    return
+
+  factory = ExecutorFactory()
+  factory.register(DRIVER_EXECUTOR)
+  self.executor = factory.create_executor(
+      DRIVER_EXECUTOR, hostname=self.hostname, port=self.port, username=self.username, password=password)
+
+  # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+
+  # Enables writing to the station via remountrw (because the file system is read-only)
+  # Check ReadOnlyRoot Pi (https://github.com/glennmckechnie/rorpi-raspberrypi) for more info
+  [stdout, stderr] = self.executor.run(&#39;sudo remountrw&#39;)
+  if stderr != &#39;&#39;:
+    raise Exception(&#34;Error enabling read-write mode&#34;)
+
+  # Assumes get_status was previously called and the station is available
+  # Creates the authorized_keys file
+  self.executor.run(&#34;mkdir -p ~/.ssh&#34;)
+  [stdout, stderr] = self.executor.run(&#34;touch ~/.ssh/authorized_keys&#34;)
+  if(stderr != &#34;&#34;):
+    raise Exception(&#34;Error touching authorized_keys file: %s&#34; % stderr)
+
+  # Reads the file /app/private_key.pem.pub and appends the key to the to the authorized_keys
+  with open(&#34;/app/private_key.pem.pub&#34;, &#34;r&#34;) as f:
+    key = f.read()
+    [stdout, stderr] = self.executor.run(
+        &#34;echo &#39;%s&#39; &gt;&gt; ~/.ssh/authorized_keys&#34; % key)
+    if(stderr != &#34;&#34;):
+      raise Exception(&#34;Error adding key to authorized_keys file&#34;)
+
+  # Restarts the SSH service
+  [stdout, stderr] = self.executor.run(&#34;sudo systemctl reload sshd&#34;)
+  if stderr != &#34;&#34;:
+    raise Exception(&#34;Error reloading SSH daemon&#34;)
+
+  [stdout, stderr] = self.executor.run(&#39;sudo remountro&#39;)
+  if stderr != &#34;&#34;:
+    raise Exception(&#34;Error disabling read-only mode&#34;)
+
+  # Checks if the station has the key registered, if not, register the key
+  self.registered = True
+
+  return True</code></pre>
+</details>
+</dd>
+<dt id="app.lib.drivers.base.BaseDriver.scan"><code class="name flex">
+<span>def <span class="ident">scan</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Scans the station and gets the status of the services available on the station</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>A dictionary with the problems, or None if everything is ok</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def scan(self):
+  &#34;&#34;&#34;Scans the station and gets the status of the services available on the station
+
+  Returns:
+      dict: A dictionary with the problems, or None if everything is ok
+  &#34;&#34;&#34;
+
+  # Initialize an empty array to store the services problems
+  problems = []
+
+  # Gets the status first
+
+  if not self.get_status():
+    # Somehow, the station is not available but didn&#39;t raise an exception
+    raise NetworkError(&#34;The station is not available&#34;)
+
+  # Runs the services check, we need to just recurse the first level
+  # This can be changed to a recursive function.
+  #TODO: Only check for the services that are in the services_map and the station services array
+  for service, operations in self.services_map.items():
+    status = None
+    [ stdout, stderr ] = self.executor.run(operations[&#39;command&#39;])
+
+    # Checks if the stdout and stderr matches the operations stdout and stderr.
+    # If the operations are None, we check if the stdout and stderr length is 0
+    if ((operations[&#39;stdout&#39;] is None and stdout == &#39;&#39;) or (operations[&#39;stdout&#39;] is not None and operations[&#39;stdout&#39;] in stdout) ) and \
+        ((operations[&#39;stderr&#39;] is None and stderr == &#39;&#39;) or ( operations[&#39;stderr&#39;] is not None and operations[&#39;stderr&#39;] in stderr)):
+        self.logger.info(&#34;The service %s is running correctly&#34; % service)
+        self.logger.info(&#34;command: %s&#34; % operations[&#39;command&#39;])
+        self.logger.info(&#34;stdout: %s&#34; % stdout)
+        self.logger.info(&#34;stderr: %s&#34; % stderr)
+        continue
+        # If the service is OK, we pass
+    else:
+      # Check in the array of operations actions, and check if the stderr matches one of them
+      for name, action in operations[&#39;actions&#39;].items():
+        if ((action[&#39;response_stdout&#39;] is None and stdout == &#39;&#39;) or (action[&#39;response_stdout&#39;] is not None and action[&#39;response_stdout&#39;] in stdout) ) and \
+          ((action[&#39;response_stderr&#39;] is None and stderr == &#39;&#39;) or ( action[&#39;response_stderr&#39;] is not None and action[&#39;response_stderr&#39;] in stderr)):
+          # If the stderr matches, we add the action to the problems
+          status = {
+              &#39;service&#39;: service,
+              &#39;action&#39;: name,
+              &#39;stdout&#39;: stdout,
+              &#39;stderr&#39;: stderr,
+              &#39;description&#39;: action[&#39;description&#39;] if &#39;description&#39; in action else &#39;No hay descripción&#39;,
+              &#39;solution&#39;: action[&#39;solution&#39;] if &#39;solution&#39; in action else &#39;No hay solución&#39;,
+              &#39;command&#39;: action[&#39;command&#39;] if &#39;command&#39; in action else None,
+              &#39;path&#39;: f&#39;%s.actions.%s&#39; % (service, name)
+          }
+          break
+
+      # If the stderr does not match any action, we add the service to the problems
+      if status is None:
+        status = {
+            &#39;service&#39;: service,
+            &#39;stdout&#39;: stdout,
+            &#39;stderr&#39;: stderr,
+            &#39;description&#39;: None,
+            &#39;solution&#39;: None,
+            &#39;command&#39;: None,
+            &#39;path&#39;: f&#39;%s.actions&#39; % service
+        }
+
+      problems.append(status)
+
+  return None if len(problems) == 0 else problems</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="app.lib.drivers" href="index.html">app.lib.drivers</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="app.lib.drivers.base.get_element" href="#app.lib.drivers.base.get_element">get_element</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="app.lib.drivers.base.BaseDriver" href="#app.lib.drivers.base.BaseDriver">BaseDriver</a></code></h4>
+<ul class="two-column">
+<li><code><a title="app.lib.drivers.base.BaseDriver.connect" href="#app.lib.drivers.base.BaseDriver.connect">connect</a></code></li>
+<li><code><a title="app.lib.drivers.base.BaseDriver.fix" href="#app.lib.drivers.base.BaseDriver.fix">fix</a></code></li>
+<li><code><a title="app.lib.drivers.base.BaseDriver.get_services" href="#app.lib.drivers.base.BaseDriver.get_services">get_services</a></code></li>
+<li><code><a title="app.lib.drivers.base.BaseDriver.get_status" href="#app.lib.drivers.base.BaseDriver.get_status">get_status</a></code></li>
+<li><code><a title="app.lib.drivers.base.BaseDriver.register" href="#app.lib.drivers.base.BaseDriver.register">register</a></code></li>
+<li><code><a title="app.lib.drivers.base.BaseDriver.scan" href="#app.lib.drivers.base.BaseDriver.scan">scan</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

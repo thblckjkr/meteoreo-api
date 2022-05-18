@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>app.lib.reporter API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>app.lib.reporter</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Class that acts as the main bridge between services and drivers
+
+# stores the information about the services, generates alerts and stores them on the database
+
+import os
+import importlib
+import logging
+import datetime
+
+from app.models.Station import Station
+from app.models.StationEvent import StationEvent
+from app.models.EventSolutions import EventSolutions
+
+from .notifications import NotificationProvider
+from .Exceptions.Generic import NetworkError
+
+logger = logging.getLogger(__name__)
+
+
+class Bridge:
+  &#34;&#34;&#34; Acts as a bridge between the databases and the drivers
+  &#34;&#34;&#34;
+  def driver_exists(driver):
+    &#34;&#34;&#34;Checks if a driver exists
+
+    Args:
+        driver (str): Driver name
+
+    Returns:
+        bool: True if the driver exists, False otherwise
+    &#34;&#34;&#34;
+    if driver is None:
+      return False
+
+    if driver in Bridge.get_drivers():
+      return True
+    else:
+      return False
+
+  def get_drivers():
+    &#34;&#34;&#34;Gets all the drivers available in the drivers folder
+
+    This function puts a strain on the IO of the system, as it scans all the drivers
+    to create a list and return it.
+
+    It should be used only on registration of a station rather than on every scan.
+    It&#39;s cheaper to try to load the driver and throw an exception than running this function
+
+    Returns:
+        list: List of all the drivers
+    &#34;&#34;&#34;
+    modules = []
+    drivers = []
+
+    for module in os.listdir(&#34;app/lib/drivers&#34;):
+      if module.endswith(&#34;.py&#34;):
+        modules.append(module.split(&#34;.&#34;)[0])
+
+    # Gets the variable DRIVERS_LIST from the driver file and returns it
+    # This is a dictionary with the key as the driver name and the value as the driver class
+    # e.g. {&#39;mock&#39;: &lt;class &#39;app.lib.drivers.mock.MockDriver&#39;&gt;}
+    for module in modules:
+      mod = importlib.import_module(&#34;app.lib.drivers.&#34; + module)
+      try:
+        drivers_list = getattr(mod, &#34;DRIVERS_LIST&#34;)
+      except AttributeError:
+        logger.error(&#34;Module %s has no DRIVERS_LIST&#34;, module)
+        continue
+
+      available_drivers = [(module + &#34;.&#34; + driver) for driver in drivers_list]
+      drivers = drivers + available_drivers
+
+    return drivers
+
+  def get_driver_instance(station):
+    &#34;&#34;&#34;Gets the driver of a station and returns it
+
+    Args:
+        station ([type]): [description]
+
+    Returns:
+        instance: Instance of a driver
+
+    Throws:
+        ModuleNotFoundError: If the driver is not found
+        AttributeError: If the class driver is not found
+    &#34;&#34;&#34;
+    try:
+      # Loads the driver from the station.drvier parameter.
+      # Assumes that the driver specification is in the form of &#34;module.class&#34;
+      module = importlib.import_module(
+          &#34;.&#34; + station.driver.split(&#34;.&#34;)[0], package=&#34;app.lib.drivers&#34;)
+      driver = getattr(module, station.driver.split(&#34;.&#34;)[1])
+      instance = driver(station)
+    except ModuleNotFoundError as e:
+      logger.error(&#34;Error loading driver: %s&#34;, str(e))
+      raise e
+    except AttributeError as e:
+      logger.error(&#34;Error loading driver, class does not exist: %s&#34;, str(e))
+      raise e
+
+    return instance
+
+
+class Reporter:
+  def __init__(self):
+    &#34;&#34;&#34;Constructor for the reporter
+
+    This method is called when the reporter is created.
+    &#34;&#34;&#34;
+
+  def routine(self):
+    &#34;&#34;&#34;Runs the routine for the reporter
+
+    This method is called by the scheduler and runs the routine for the reporter.
+    &#34;&#34;&#34;
+    stations = self.get_stations()
+
+    print(&#34;Running routine for reporter&#34;)
+    for station in stations:
+      print(&#34;Checking station: &#34; + station.name)
+      reporter = StationReporter(station)
+      reporter.generate_station_status()
+
+  def refresh_stations(self):
+    &#34;&#34;&#34;Refreshes the stations
+
+    This method helps to refresh the list of services available in each station
+    (Helpful for when the driver is updated)
+    &#34;&#34;&#34;
+    stations = self.get_stations()
+
+    for station in stations:
+      # Create a instance of the driver
+      driver = Bridge.get_driver_instance(station)
+
+      # Get the available services according to the driver
+      station.services = instance.get_services()
+
+      # Tries to save the station in the database
+      try:
+        station.save()
+      except Exception as e:
+        logger.error(&#34;Error saving station: %s&#34;, str(e))
+        continue
+
+  def get_stations(self):
+    &#34;&#34;&#34;Get a list of the available stations
+
+    Using the app/models/Station, gets the stations that are available
+    &#34;&#34;&#34;
+    return Station.get()
+
+class StationReporter:
+
+  def __init__(self, station):
+    &#34;&#34;&#34;Constructor for the station reporter
+
+      This method handles the generation of reports of the station
+      Also keeps in mind the idea of parallelization in the future.
+    &#34;&#34;&#34;
+    self.station = station
+    try:
+      self.driver = Bridge.get_driver_instance(station)
+    except Exception as e:
+      # This error would only be triggered if the driver is erased or the class is renamed
+      # This is not a problem, so we just log it and move on
+      logger.error(&#34;Error loading driver: %s&#34;, str(e))
+      self.generate_event(&#34;driver_error&#34;)
+
+
+  def generate_station_status(self):
+    &#34;&#34;&#34;Loads the driver and get the status of the station, generates an event if neccessary.
+
+    Connects to the station via driver, checks the status and generates an event if neccessary
+    &#34;&#34;&#34;
+    # Touches and stores the last scan time
+    self.station.last_scan = datetime.datetime.now()
+    self.station.save()
+
+    try:
+      self.driver.connect()
+      problems = self.driver.scan()
+
+    except NetworkError as e:
+      logger.warning(
+          &#34;There was a connection error to the station %s&#34;, self.station.name)
+      self.generate_event(&#34;network_error&#34;)
+      self.solve_events(None, &#34;network_error&#34;)
+      return  # If the network is down, we can&#39;t get the status, so we just return and end the function
+
+    except Exception as e:
+      # Fatal error that isn&#39;t a network error
+      logger.error(
+          &#34;There was an error while getting the status of the station %s: %s&#34;, self.station.name, str(e))
+      self.generate_event(&#34;driver_error&#34;)
+      self.solve_events(None, &#34;driver_error&#34;)
+      return # If there is a driver error, there is no way we can have a status
+
+    # Check the contents of status, to see if there were any errors, and send the errors to the generator
+    if problems is not None:
+      for problem in problems:
+        self.generate_event(&#34;service_error&#34;, problem)
+
+    # Solve events that were not present in the scan.
+    self.solve_events(problems, &#34;service_error&#34;)
+
+  def fix_event(self, path):
+    &#34;&#34;&#34;Fixes an event
+
+    This method fixes an event by setting the status to fixed and the path to the solution
+
+    Args:
+        path (str): Path to the solution
+    &#34;&#34;&#34;
+    try:
+      self.driver.connect()
+      status = self.driver.fix(path)
+    except NetworkError as e:
+      logger.warning(
+          &#34;There was a connection error to the station %s&#34;, self.station.name)
+      self.generate_event(&#34;network_error&#34;)
+      self.solve_events(None, &#34;network_error&#34;)
+      return  # If the network is down, we can&#39;t get the status, so we just return and end the function
+
+    except Exception as e:
+      # Fatal error that isn&#39;t a network error
+      logger.error(
+          &#34;There was an error while solving the error %s: %s&#34;, self.station.name, str(e))
+      self.generate_event(&#34;driver_error&#34;)
+      self.solve_events(None, &#34;driver_error&#34;)
+      return # If there is a driver error, there is no way we can have a status
+
+    # Check the contents of status, to see if there were any errors, and send the errors to the generator
+    if status is None:
+      raise Exception(&#34;Status is None&#34;)
+
+    if status[&#39;status&#39;] == &#34;error&#34;:
+      self.generate_event(&#34;service_error&#34;, status[&#39;problem&#39;])
+
+    # Solve events that were not present in the scan.
+    #TODO: This makes all events solved, except for the one that was almost solved.
+    self.solve_events(status.get(&#39;problem&#39;), &#34;service_error&#34;)
+
+    # Notify the user
+    #TODO: Notify the user
+
+    return status
+
+  def generate_event(self, error, data=None):
+    &#34;&#34;&#34; Generates an event for the station
+
+    This method is called when the status of the station changes.
+
+    It first checks if the event already exists, if it does, it updates it, if not, it creates a new one.
+    If the event is a network error, but the last scan time of the station is less than ALERT_TIME
+    it updates the event.
+    &#34;&#34;&#34;
+    if data is None:
+      data = {
+          &#39;path&#39;: &#34;&#34;,
+      }
+
+    # Check if there is an event of the same error type and in the same path
+    lastEvent = StationEvent.where({
+        &#34;type&#34;: error,
+        &#34;path&#34;: data[&#39;path&#39;],
+        &#34;station_id&#34;: self.station.id,
+        &#34;status&#34;: &#34;pending&#34;
+    }).get()
+
+    if lastEvent.is_empty():
+      logger.warning(&#34;Generating event of type %s for station %s&#34;, error, self.station.name)
+
+      # If there is no event, create a new one
+      event = StationEvent()
+
+      event.station_id = self.station.id
+      event.type = error
+      event.path = data[&#39;path&#39;]
+      event.data = data
+      event.status = &#34;pending&#34;
+      event.save()
+    else:
+      logger.warning(&#34;Touching event %s for station %s&#34;, error, self.station.name)
+      # If there is an event, update the last reported time
+      lastEvent.first().touch()
+
+    try:
+      notification = NotificationProvider()
+      notification.build(
+        station = self.station,
+        error = error,
+      )
+
+      notification.send(is_new_event=lastEvent.is_empty())
+    except Exception as e:
+      logger.error(&#34;Error sending notification: %s&#34;, str(e))
+
+  def solve_events(self, problems, type):
+    &#34;&#34;&#34;Solves the events of the station
+
+    This method is called when the station is scanned, and there is not networ or driver error.
+    So, if this method is called, it means that the station is working correctly, and we can solve
+    the events that were not present in the scan.
+
+    If the problem is a network error, that means that driver is correctly working, so we can solve
+    the event.
+
+    If the problem is a service error, that means network and drivers problem can be solved.
+
+    It checks the events of the station, and solves them if they are not present in the scan.
+    &#34;&#34;&#34;
+
+    if type == &#34;driver_error&#34;:
+      # If the driver is not working, we can&#39;t solve the events
+      return
+
+    if problems is None:
+      events = StationEvent.unresolved().where({
+          &#34;station_id&#34;: self.station.id,
+      })
+
+      # All problems must be solved?
+      if type == &#34;network_error&#34;:
+        events.where({
+          &#34;type&#34;: &#34;driver_error&#34;,
+        })
+      elif type == &#34;service_error&#34;:
+        # Solves all events
+        events.where_in(
+          &#34;type&#34;, [ &#34;network_error&#34;, &#34;driver_error&#34;, &#34;service_error&#34; ]
+        )
+    else:
+      # Only the problems with the same path must be solved
+      events = StationEvent.unresolved().where({
+          &#34;station_id&#34;: self.station.id,
+      }).where_not_in(
+          &#34;path&#34;, [p[&#39;path&#39;] for p in problems]
+      )
+
+    events = events.get()
+
+    logger.warning(&#34;Solving events for station %s: %s [%s]&#34;, self.station.name, events.serialize(), problems)
+    for event in events:
+      event.status = &#34;auto_solved&#34;
+
+      EventSolutions.create({
+          &#34;station_event_id&#34;: event.id,
+          &#34;solution&#34;: &#34;Solución automática al escanearse la estación&#34;,
+          &#34;solved_by&#34;: &#34;auto&#34;,
+          &#34;solved_at&#34;: datetime.datetime.now(),
+          &#34;station_id&#34;: self.station.id
+      })
+
+      event.save()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="app.lib.reporter.Bridge"><code class="flex name class">
+<span>class <span class="ident">Bridge</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Acts as a bridge between the databases and the drivers</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Bridge:
+  &#34;&#34;&#34; Acts as a bridge between the databases and the drivers
+  &#34;&#34;&#34;
+  def driver_exists(driver):
+    &#34;&#34;&#34;Checks if a driver exists
+
+    Args:
+        driver (str): Driver name
+
+    Returns:
+        bool: True if the driver exists, False otherwise
+    &#34;&#34;&#34;
+    if driver is None:
+      return False
+
+    if driver in Bridge.get_drivers():
+      return True
+    else:
+      return False
+
+  def get_drivers():
+    &#34;&#34;&#34;Gets all the drivers available in the drivers folder
+
+    This function puts a strain on the IO of the system, as it scans all the drivers
+    to create a list and return it.
+
+    It should be used only on registration of a station rather than on every scan.
+    It&#39;s cheaper to try to load the driver and throw an exception than running this function
+
+    Returns:
+        list: List of all the drivers
+    &#34;&#34;&#34;
+    modules = []
+    drivers = []
+
+    for module in os.listdir(&#34;app/lib/drivers&#34;):
+      if module.endswith(&#34;.py&#34;):
+        modules.append(module.split(&#34;.&#34;)[0])
+
+    # Gets the variable DRIVERS_LIST from the driver file and returns it
+    # This is a dictionary with the key as the driver name and the value as the driver class
+    # e.g. {&#39;mock&#39;: &lt;class &#39;app.lib.drivers.mock.MockDriver&#39;&gt;}
+    for module in modules:
+      mod = importlib.import_module(&#34;app.lib.drivers.&#34; + module)
+      try:
+        drivers_list = getattr(mod, &#34;DRIVERS_LIST&#34;)
+      except AttributeError:
+        logger.error(&#34;Module %s has no DRIVERS_LIST&#34;, module)
+        continue
+
+      available_drivers = [(module + &#34;.&#34; + driver) for driver in drivers_list]
+      drivers = drivers + available_drivers
+
+    return drivers
+
+  def get_driver_instance(station):
+    &#34;&#34;&#34;Gets the driver of a station and returns it
+
+    Args:
+        station ([type]): [description]
+
+    Returns:
+        instance: Instance of a driver
+
+    Throws:
+        ModuleNotFoundError: If the driver is not found
+        AttributeError: If the class driver is not found
+    &#34;&#34;&#34;
+    try:
+      # Loads the driver from the station.drvier parameter.
+      # Assumes that the driver specification is in the form of &#34;module.class&#34;
+      module = importlib.import_module(
+          &#34;.&#34; + station.driver.split(&#34;.&#34;)[0], package=&#34;app.lib.drivers&#34;)
+      driver = getattr(module, station.driver.split(&#34;.&#34;)[1])
+      instance = driver(station)
+    except ModuleNotFoundError as e:
+      logger.error(&#34;Error loading driver: %s&#34;, str(e))
+      raise e
+    except AttributeError as e:
+      logger.error(&#34;Error loading driver, class does not exist: %s&#34;, str(e))
+      raise e
+
+    return instance</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="app.lib.reporter.Bridge.driver_exists"><code class="name flex">
+<span>def <span class="ident">driver_exists</span></span>(<span>driver)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks if a driver exists</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>driver</code></strong> :&ensp;<code>str</code></dt>
+<dd>Driver name</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the driver exists, False otherwise</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def driver_exists(driver):
+  &#34;&#34;&#34;Checks if a driver exists
+
+  Args:
+      driver (str): Driver name
+
+  Returns:
+      bool: True if the driver exists, False otherwise
+  &#34;&#34;&#34;
+  if driver is None:
+    return False
+
+  if driver in Bridge.get_drivers():
+    return True
+  else:
+    return False</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.Bridge.get_driver_instance"><code class="name flex">
+<span>def <span class="ident">get_driver_instance</span></span>(<span>station)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the driver of a station and returns it</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>station</code></strong> :&ensp;<code>[type]</code></dt>
+<dd>[description]</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>instance</code></dt>
+<dd>Instance of a driver</dd>
+</dl>
+<h2 id="throws">Throws</h2>
+<p>ModuleNotFoundError: If the driver is not found
+AttributeError: If the class driver is not found</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_driver_instance(station):
+  &#34;&#34;&#34;Gets the driver of a station and returns it
+
+  Args:
+      station ([type]): [description]
+
+  Returns:
+      instance: Instance of a driver
+
+  Throws:
+      ModuleNotFoundError: If the driver is not found
+      AttributeError: If the class driver is not found
+  &#34;&#34;&#34;
+  try:
+    # Loads the driver from the station.drvier parameter.
+    # Assumes that the driver specification is in the form of &#34;module.class&#34;
+    module = importlib.import_module(
+        &#34;.&#34; + station.driver.split(&#34;.&#34;)[0], package=&#34;app.lib.drivers&#34;)
+    driver = getattr(module, station.driver.split(&#34;.&#34;)[1])
+    instance = driver(station)
+  except ModuleNotFoundError as e:
+    logger.error(&#34;Error loading driver: %s&#34;, str(e))
+    raise e
+  except AttributeError as e:
+    logger.error(&#34;Error loading driver, class does not exist: %s&#34;, str(e))
+    raise e
+
+  return instance</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.Bridge.get_drivers"><code class="name flex">
+<span>def <span class="ident">get_drivers</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets all the drivers available in the drivers folder</p>
+<p>This function puts a strain on the IO of the system, as it scans all the drivers
+to create a list and return it.</p>
+<p>It should be used only on registration of a station rather than on every scan.
+It's cheaper to try to load the driver and throw an exception than running this function</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>List of all the drivers</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_drivers():
+  &#34;&#34;&#34;Gets all the drivers available in the drivers folder
+
+  This function puts a strain on the IO of the system, as it scans all the drivers
+  to create a list and return it.
+
+  It should be used only on registration of a station rather than on every scan.
+  It&#39;s cheaper to try to load the driver and throw an exception than running this function
+
+  Returns:
+      list: List of all the drivers
+  &#34;&#34;&#34;
+  modules = []
+  drivers = []
+
+  for module in os.listdir(&#34;app/lib/drivers&#34;):
+    if module.endswith(&#34;.py&#34;):
+      modules.append(module.split(&#34;.&#34;)[0])
+
+  # Gets the variable DRIVERS_LIST from the driver file and returns it
+  # This is a dictionary with the key as the driver name and the value as the driver class
+  # e.g. {&#39;mock&#39;: &lt;class &#39;app.lib.drivers.mock.MockDriver&#39;&gt;}
+  for module in modules:
+    mod = importlib.import_module(&#34;app.lib.drivers.&#34; + module)
+    try:
+      drivers_list = getattr(mod, &#34;DRIVERS_LIST&#34;)
+    except AttributeError:
+      logger.error(&#34;Module %s has no DRIVERS_LIST&#34;, module)
+      continue
+
+    available_drivers = [(module + &#34;.&#34; + driver) for driver in drivers_list]
+    drivers = drivers + available_drivers
+
+  return drivers</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="app.lib.reporter.Reporter"><code class="flex name class">
+<span>class <span class="ident">Reporter</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Constructor for the reporter</p>
+<p>This method is called when the reporter is created.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Reporter:
+  def __init__(self):
+    &#34;&#34;&#34;Constructor for the reporter
+
+    This method is called when the reporter is created.
+    &#34;&#34;&#34;
+
+  def routine(self):
+    &#34;&#34;&#34;Runs the routine for the reporter
+
+    This method is called by the scheduler and runs the routine for the reporter.
+    &#34;&#34;&#34;
+    stations = self.get_stations()
+
+    print(&#34;Running routine for reporter&#34;)
+    for station in stations:
+      print(&#34;Checking station: &#34; + station.name)
+      reporter = StationReporter(station)
+      reporter.generate_station_status()
+
+  def refresh_stations(self):
+    &#34;&#34;&#34;Refreshes the stations
+
+    This method helps to refresh the list of services available in each station
+    (Helpful for when the driver is updated)
+    &#34;&#34;&#34;
+    stations = self.get_stations()
+
+    for station in stations:
+      # Create a instance of the driver
+      driver = Bridge.get_driver_instance(station)
+
+      # Get the available services according to the driver
+      station.services = instance.get_services()
+
+      # Tries to save the station in the database
+      try:
+        station.save()
+      except Exception as e:
+        logger.error(&#34;Error saving station: %s&#34;, str(e))
+        continue
+
+  def get_stations(self):
+    &#34;&#34;&#34;Get a list of the available stations
+
+    Using the app/models/Station, gets the stations that are available
+    &#34;&#34;&#34;
+    return Station.get()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="app.lib.reporter.Reporter.get_stations"><code class="name flex">
+<span>def <span class="ident">get_stations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get a list of the available stations</p>
+<p>Using the app/models/Station, gets the stations that are available</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_stations(self):
+  &#34;&#34;&#34;Get a list of the available stations
+
+  Using the app/models/Station, gets the stations that are available
+  &#34;&#34;&#34;
+  return Station.get()</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.Reporter.refresh_stations"><code class="name flex">
+<span>def <span class="ident">refresh_stations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Refreshes the stations</p>
+<p>This method helps to refresh the list of services available in each station
+(Helpful for when the driver is updated)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def refresh_stations(self):
+  &#34;&#34;&#34;Refreshes the stations
+
+  This method helps to refresh the list of services available in each station
+  (Helpful for when the driver is updated)
+  &#34;&#34;&#34;
+  stations = self.get_stations()
+
+  for station in stations:
+    # Create a instance of the driver
+    driver = Bridge.get_driver_instance(station)
+
+    # Get the available services according to the driver
+    station.services = instance.get_services()
+
+    # Tries to save the station in the database
+    try:
+      station.save()
+    except Exception as e:
+      logger.error(&#34;Error saving station: %s&#34;, str(e))
+      continue</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.Reporter.routine"><code class="name flex">
+<span>def <span class="ident">routine</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Runs the routine for the reporter</p>
+<p>This method is called by the scheduler and runs the routine for the reporter.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def routine(self):
+  &#34;&#34;&#34;Runs the routine for the reporter
+
+  This method is called by the scheduler and runs the routine for the reporter.
+  &#34;&#34;&#34;
+  stations = self.get_stations()
+
+  print(&#34;Running routine for reporter&#34;)
+  for station in stations:
+    print(&#34;Checking station: &#34; + station.name)
+    reporter = StationReporter(station)
+    reporter.generate_station_status()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="app.lib.reporter.StationReporter"><code class="flex name class">
+<span>class <span class="ident">StationReporter</span></span>
+<span>(</span><span>station)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Constructor for the station reporter</p>
+<p>This method handles the generation of reports of the station
+Also keeps in mind the idea of parallelization in the future.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StationReporter:
+
+  def __init__(self, station):
+    &#34;&#34;&#34;Constructor for the station reporter
+
+      This method handles the generation of reports of the station
+      Also keeps in mind the idea of parallelization in the future.
+    &#34;&#34;&#34;
+    self.station = station
+    try:
+      self.driver = Bridge.get_driver_instance(station)
+    except Exception as e:
+      # This error would only be triggered if the driver is erased or the class is renamed
+      # This is not a problem, so we just log it and move on
+      logger.error(&#34;Error loading driver: %s&#34;, str(e))
+      self.generate_event(&#34;driver_error&#34;)
+
+
+  def generate_station_status(self):
+    &#34;&#34;&#34;Loads the driver and get the status of the station, generates an event if neccessary.
+
+    Connects to the station via driver, checks the status and generates an event if neccessary
+    &#34;&#34;&#34;
+    # Touches and stores the last scan time
+    self.station.last_scan = datetime.datetime.now()
+    self.station.save()
+
+    try:
+      self.driver.connect()
+      problems = self.driver.scan()
+
+    except NetworkError as e:
+      logger.warning(
+          &#34;There was a connection error to the station %s&#34;, self.station.name)
+      self.generate_event(&#34;network_error&#34;)
+      self.solve_events(None, &#34;network_error&#34;)
+      return  # If the network is down, we can&#39;t get the status, so we just return and end the function
+
+    except Exception as e:
+      # Fatal error that isn&#39;t a network error
+      logger.error(
+          &#34;There was an error while getting the status of the station %s: %s&#34;, self.station.name, str(e))
+      self.generate_event(&#34;driver_error&#34;)
+      self.solve_events(None, &#34;driver_error&#34;)
+      return # If there is a driver error, there is no way we can have a status
+
+    # Check the contents of status, to see if there were any errors, and send the errors to the generator
+    if problems is not None:
+      for problem in problems:
+        self.generate_event(&#34;service_error&#34;, problem)
+
+    # Solve events that were not present in the scan.
+    self.solve_events(problems, &#34;service_error&#34;)
+
+  def fix_event(self, path):
+    &#34;&#34;&#34;Fixes an event
+
+    This method fixes an event by setting the status to fixed and the path to the solution
+
+    Args:
+        path (str): Path to the solution
+    &#34;&#34;&#34;
+    try:
+      self.driver.connect()
+      status = self.driver.fix(path)
+    except NetworkError as e:
+      logger.warning(
+          &#34;There was a connection error to the station %s&#34;, self.station.name)
+      self.generate_event(&#34;network_error&#34;)
+      self.solve_events(None, &#34;network_error&#34;)
+      return  # If the network is down, we can&#39;t get the status, so we just return and end the function
+
+    except Exception as e:
+      # Fatal error that isn&#39;t a network error
+      logger.error(
+          &#34;There was an error while solving the error %s: %s&#34;, self.station.name, str(e))
+      self.generate_event(&#34;driver_error&#34;)
+      self.solve_events(None, &#34;driver_error&#34;)
+      return # If there is a driver error, there is no way we can have a status
+
+    # Check the contents of status, to see if there were any errors, and send the errors to the generator
+    if status is None:
+      raise Exception(&#34;Status is None&#34;)
+
+    if status[&#39;status&#39;] == &#34;error&#34;:
+      self.generate_event(&#34;service_error&#34;, status[&#39;problem&#39;])
+
+    # Solve events that were not present in the scan.
+    #TODO: This makes all events solved, except for the one that was almost solved.
+    self.solve_events(status.get(&#39;problem&#39;), &#34;service_error&#34;)
+
+    # Notify the user
+    #TODO: Notify the user
+
+    return status
+
+  def generate_event(self, error, data=None):
+    &#34;&#34;&#34; Generates an event for the station
+
+    This method is called when the status of the station changes.
+
+    It first checks if the event already exists, if it does, it updates it, if not, it creates a new one.
+    If the event is a network error, but the last scan time of the station is less than ALERT_TIME
+    it updates the event.
+    &#34;&#34;&#34;
+    if data is None:
+      data = {
+          &#39;path&#39;: &#34;&#34;,
+      }
+
+    # Check if there is an event of the same error type and in the same path
+    lastEvent = StationEvent.where({
+        &#34;type&#34;: error,
+        &#34;path&#34;: data[&#39;path&#39;],
+        &#34;station_id&#34;: self.station.id,
+        &#34;status&#34;: &#34;pending&#34;
+    }).get()
+
+    if lastEvent.is_empty():
+      logger.warning(&#34;Generating event of type %s for station %s&#34;, error, self.station.name)
+
+      # If there is no event, create a new one
+      event = StationEvent()
+
+      event.station_id = self.station.id
+      event.type = error
+      event.path = data[&#39;path&#39;]
+      event.data = data
+      event.status = &#34;pending&#34;
+      event.save()
+    else:
+      logger.warning(&#34;Touching event %s for station %s&#34;, error, self.station.name)
+      # If there is an event, update the last reported time
+      lastEvent.first().touch()
+
+    try:
+      notification = NotificationProvider()
+      notification.build(
+        station = self.station,
+        error = error,
+      )
+
+      notification.send(is_new_event=lastEvent.is_empty())
+    except Exception as e:
+      logger.error(&#34;Error sending notification: %s&#34;, str(e))
+
+  def solve_events(self, problems, type):
+    &#34;&#34;&#34;Solves the events of the station
+
+    This method is called when the station is scanned, and there is not networ or driver error.
+    So, if this method is called, it means that the station is working correctly, and we can solve
+    the events that were not present in the scan.
+
+    If the problem is a network error, that means that driver is correctly working, so we can solve
+    the event.
+
+    If the problem is a service error, that means network and drivers problem can be solved.
+
+    It checks the events of the station, and solves them if they are not present in the scan.
+    &#34;&#34;&#34;
+
+    if type == &#34;driver_error&#34;:
+      # If the driver is not working, we can&#39;t solve the events
+      return
+
+    if problems is None:
+      events = StationEvent.unresolved().where({
+          &#34;station_id&#34;: self.station.id,
+      })
+
+      # All problems must be solved?
+      if type == &#34;network_error&#34;:
+        events.where({
+          &#34;type&#34;: &#34;driver_error&#34;,
+        })
+      elif type == &#34;service_error&#34;:
+        # Solves all events
+        events.where_in(
+          &#34;type&#34;, [ &#34;network_error&#34;, &#34;driver_error&#34;, &#34;service_error&#34; ]
+        )
+    else:
+      # Only the problems with the same path must be solved
+      events = StationEvent.unresolved().where({
+          &#34;station_id&#34;: self.station.id,
+      }).where_not_in(
+          &#34;path&#34;, [p[&#39;path&#39;] for p in problems]
+      )
+
+    events = events.get()
+
+    logger.warning(&#34;Solving events for station %s: %s [%s]&#34;, self.station.name, events.serialize(), problems)
+    for event in events:
+      event.status = &#34;auto_solved&#34;
+
+      EventSolutions.create({
+          &#34;station_event_id&#34;: event.id,
+          &#34;solution&#34;: &#34;Solución automática al escanearse la estación&#34;,
+          &#34;solved_by&#34;: &#34;auto&#34;,
+          &#34;solved_at&#34;: datetime.datetime.now(),
+          &#34;station_id&#34;: self.station.id
+      })
+
+      event.save()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="app.lib.reporter.StationReporter.fix_event"><code class="name flex">
+<span>def <span class="ident">fix_event</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Fixes an event</p>
+<p>This method fixes an event by setting the status to fixed and the path to the solution</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path to the solution</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fix_event(self, path):
+  &#34;&#34;&#34;Fixes an event
+
+  This method fixes an event by setting the status to fixed and the path to the solution
+
+  Args:
+      path (str): Path to the solution
+  &#34;&#34;&#34;
+  try:
+    self.driver.connect()
+    status = self.driver.fix(path)
+  except NetworkError as e:
+    logger.warning(
+        &#34;There was a connection error to the station %s&#34;, self.station.name)
+    self.generate_event(&#34;network_error&#34;)
+    self.solve_events(None, &#34;network_error&#34;)
+    return  # If the network is down, we can&#39;t get the status, so we just return and end the function
+
+  except Exception as e:
+    # Fatal error that isn&#39;t a network error
+    logger.error(
+        &#34;There was an error while solving the error %s: %s&#34;, self.station.name, str(e))
+    self.generate_event(&#34;driver_error&#34;)
+    self.solve_events(None, &#34;driver_error&#34;)
+    return # If there is a driver error, there is no way we can have a status
+
+  # Check the contents of status, to see if there were any errors, and send the errors to the generator
+  if status is None:
+    raise Exception(&#34;Status is None&#34;)
+
+  if status[&#39;status&#39;] == &#34;error&#34;:
+    self.generate_event(&#34;service_error&#34;, status[&#39;problem&#39;])
+
+  # Solve events that were not present in the scan.
+  #TODO: This makes all events solved, except for the one that was almost solved.
+  self.solve_events(status.get(&#39;problem&#39;), &#34;service_error&#34;)
+
+  # Notify the user
+  #TODO: Notify the user
+
+  return status</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.StationReporter.generate_event"><code class="name flex">
+<span>def <span class="ident">generate_event</span></span>(<span>self, error, data=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates an event for the station</p>
+<p>This method is called when the status of the station changes.</p>
+<p>It first checks if the event already exists, if it does, it updates it, if not, it creates a new one.
+If the event is a network error, but the last scan time of the station is less than ALERT_TIME
+it updates the event.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_event(self, error, data=None):
+  &#34;&#34;&#34; Generates an event for the station
+
+  This method is called when the status of the station changes.
+
+  It first checks if the event already exists, if it does, it updates it, if not, it creates a new one.
+  If the event is a network error, but the last scan time of the station is less than ALERT_TIME
+  it updates the event.
+  &#34;&#34;&#34;
+  if data is None:
+    data = {
+        &#39;path&#39;: &#34;&#34;,
+    }
+
+  # Check if there is an event of the same error type and in the same path
+  lastEvent = StationEvent.where({
+      &#34;type&#34;: error,
+      &#34;path&#34;: data[&#39;path&#39;],
+      &#34;station_id&#34;: self.station.id,
+      &#34;status&#34;: &#34;pending&#34;
+  }).get()
+
+  if lastEvent.is_empty():
+    logger.warning(&#34;Generating event of type %s for station %s&#34;, error, self.station.name)
+
+    # If there is no event, create a new one
+    event = StationEvent()
+
+    event.station_id = self.station.id
+    event.type = error
+    event.path = data[&#39;path&#39;]
+    event.data = data
+    event.status = &#34;pending&#34;
+    event.save()
+  else:
+    logger.warning(&#34;Touching event %s for station %s&#34;, error, self.station.name)
+    # If there is an event, update the last reported time
+    lastEvent.first().touch()
+
+  try:
+    notification = NotificationProvider()
+    notification.build(
+      station = self.station,
+      error = error,
+    )
+
+    notification.send(is_new_event=lastEvent.is_empty())
+  except Exception as e:
+    logger.error(&#34;Error sending notification: %s&#34;, str(e))</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.StationReporter.generate_station_status"><code class="name flex">
+<span>def <span class="ident">generate_station_status</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Loads the driver and get the status of the station, generates an event if neccessary.</p>
+<p>Connects to the station via driver, checks the status and generates an event if neccessary</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_station_status(self):
+  &#34;&#34;&#34;Loads the driver and get the status of the station, generates an event if neccessary.
+
+  Connects to the station via driver, checks the status and generates an event if neccessary
+  &#34;&#34;&#34;
+  # Touches and stores the last scan time
+  self.station.last_scan = datetime.datetime.now()
+  self.station.save()
+
+  try:
+    self.driver.connect()
+    problems = self.driver.scan()
+
+  except NetworkError as e:
+    logger.warning(
+        &#34;There was a connection error to the station %s&#34;, self.station.name)
+    self.generate_event(&#34;network_error&#34;)
+    self.solve_events(None, &#34;network_error&#34;)
+    return  # If the network is down, we can&#39;t get the status, so we just return and end the function
+
+  except Exception as e:
+    # Fatal error that isn&#39;t a network error
+    logger.error(
+        &#34;There was an error while getting the status of the station %s: %s&#34;, self.station.name, str(e))
+    self.generate_event(&#34;driver_error&#34;)
+    self.solve_events(None, &#34;driver_error&#34;)
+    return # If there is a driver error, there is no way we can have a status
+
+  # Check the contents of status, to see if there were any errors, and send the errors to the generator
+  if problems is not None:
+    for problem in problems:
+      self.generate_event(&#34;service_error&#34;, problem)
+
+  # Solve events that were not present in the scan.
+  self.solve_events(problems, &#34;service_error&#34;)</code></pre>
+</details>
+</dd>
+<dt id="app.lib.reporter.StationReporter.solve_events"><code class="name flex">
+<span>def <span class="ident">solve_events</span></span>(<span>self, problems, type)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Solves the events of the station</p>
+<p>This method is called when the station is scanned, and there is not networ or driver error.
+So, if this method is called, it means that the station is working correctly, and we can solve
+the events that were not present in the scan.</p>
+<p>If the problem is a network error, that means that driver is correctly working, so we can solve
+the event.</p>
+<p>If the problem is a service error, that means network and drivers problem can be solved.</p>
+<p>It checks the events of the station, and solves them if they are not present in the scan.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_events(self, problems, type):
+  &#34;&#34;&#34;Solves the events of the station
+
+  This method is called when the station is scanned, and there is not networ or driver error.
+  So, if this method is called, it means that the station is working correctly, and we can solve
+  the events that were not present in the scan.
+
+  If the problem is a network error, that means that driver is correctly working, so we can solve
+  the event.
+
+  If the problem is a service error, that means network and drivers problem can be solved.
+
+  It checks the events of the station, and solves them if they are not present in the scan.
+  &#34;&#34;&#34;
+
+  if type == &#34;driver_error&#34;:
+    # If the driver is not working, we can&#39;t solve the events
+    return
+
+  if problems is None:
+    events = StationEvent.unresolved().where({
+        &#34;station_id&#34;: self.station.id,
+    })
+
+    # All problems must be solved?
+    if type == &#34;network_error&#34;:
+      events.where({
+        &#34;type&#34;: &#34;driver_error&#34;,
+      })
+    elif type == &#34;service_error&#34;:
+      # Solves all events
+      events.where_in(
+        &#34;type&#34;, [ &#34;network_error&#34;, &#34;driver_error&#34;, &#34;service_error&#34; ]
+      )
+  else:
+    # Only the problems with the same path must be solved
+    events = StationEvent.unresolved().where({
+        &#34;station_id&#34;: self.station.id,
+    }).where_not_in(
+        &#34;path&#34;, [p[&#39;path&#39;] for p in problems]
+    )
+
+  events = events.get()
+
+  logger.warning(&#34;Solving events for station %s: %s [%s]&#34;, self.station.name, events.serialize(), problems)
+  for event in events:
+    event.status = &#34;auto_solved&#34;
+
+    EventSolutions.create({
+        &#34;station_event_id&#34;: event.id,
+        &#34;solution&#34;: &#34;Solución automática al escanearse la estación&#34;,
+        &#34;solved_by&#34;: &#34;auto&#34;,
+        &#34;solved_at&#34;: datetime.datetime.now(),
+        &#34;station_id&#34;: self.station.id
+    })
+
+    event.save()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="app.lib" href="index.html">app.lib</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="app.lib.reporter.Bridge" href="#app.lib.reporter.Bridge">Bridge</a></code></h4>
+<ul class="">
+<li><code><a title="app.lib.reporter.Bridge.driver_exists" href="#app.lib.reporter.Bridge.driver_exists">driver_exists</a></code></li>
+<li><code><a title="app.lib.reporter.Bridge.get_driver_instance" href="#app.lib.reporter.Bridge.get_driver_instance">get_driver_instance</a></code></li>
+<li><code><a title="app.lib.reporter.Bridge.get_drivers" href="#app.lib.reporter.Bridge.get_drivers">get_drivers</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="app.lib.reporter.Reporter" href="#app.lib.reporter.Reporter">Reporter</a></code></h4>
+<ul class="">
+<li><code><a title="app.lib.reporter.Reporter.get_stations" href="#app.lib.reporter.Reporter.get_stations">get_stations</a></code></li>
+<li><code><a title="app.lib.reporter.Reporter.refresh_stations" href="#app.lib.reporter.Reporter.refresh_stations">refresh_stations</a></code></li>
+<li><code><a title="app.lib.reporter.Reporter.routine" href="#app.lib.reporter.Reporter.routine">routine</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="app.lib.reporter.StationReporter" href="#app.lib.reporter.StationReporter">StationReporter</a></code></h4>
+<ul class="">
+<li><code><a title="app.lib.reporter.StationReporter.fix_event" href="#app.lib.reporter.StationReporter.fix_event">fix_event</a></code></li>
+<li><code><a title="app.lib.reporter.StationReporter.generate_event" href="#app.lib.reporter.StationReporter.generate_event">generate_event</a></code></li>
+<li><code><a title="app.lib.reporter.StationReporter.generate_station_status" href="#app.lib.reporter.StationReporter.generate_station_status">generate_station_status</a></code></li>
+<li><code><a title="app.lib.reporter.StationReporter.solve_events" href="#app.lib.reporter.StationReporter.solve_events">solve_events</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
