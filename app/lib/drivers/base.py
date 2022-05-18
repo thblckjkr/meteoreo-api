@@ -82,7 +82,7 @@ class BaseDriver():
     # Check ReadOnlyRoot Pi (https://github.com/glennmckechnie/rorpi-raspberrypi) for more info
     [stdout, stderr] = self.executor.run('sudo remountrw')
     if stderr != '':
-      raise Exception("Error enabling read-write mode")
+      raise Exception("Error enabling read-write mode: %s" % stderr)
 
     # Assumes get_status was previously called and the station is available
     # Creates the authorized_keys file

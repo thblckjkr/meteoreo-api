@@ -130,6 +130,20 @@ def post_station(uuid: str, station: StationRequest.Schema):
   station.update(**station.dict())
   return station.serialize()
 
+@router.post("/{uuid}/rescan")
+def rescan_station(uuid: str):
+  """
+  Loads the staion data from the dabase, then instantiates the driver and forces a rescan with the StationReporter
+  """
+  station = Station.find(uuid)
+  # try:
+  reporter = StationReporter(station)
+  reporter.generate_station_status()
+  # except Exception as e:
+  #   raise HTTPException(status_code=500, detail=str(e))
+
+  return { "scanned": True }
+
 @router.post("/{uuid}/solve")
 def solve_incident(uuid: str, incident_path: str):
   """
