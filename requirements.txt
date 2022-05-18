@@ -6,4 +6,4 @@ python-dotenv==0.19.2
 sentry_sdk==1.4.3
 onesignal-sdk==2.0.0
 autopep8==1.6.0
-pymysql=1.0.2
+pymysql==1.0.2
