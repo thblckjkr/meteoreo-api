@@ -100,8 +100,8 @@ async def put_station(station: StationRequest.Schema):
   # Store the station in the database
   try:
     stationModel.save()
-  except:
-    raise HTTPException(status_code=500, detail="Unable to save the station")
+  except Exception as e:
+    raise HTTPException(status_code=500, detail="Unable to save the station %s" % e)
 
   return {
       "status": "Ok",
@@ -116,7 +116,7 @@ def delete_station(uuid: UUID):
 
   This actually *soft deletes* the station, to preserve the history of the station
   """
-  station = Station.get(uuid)
+  station = Station.find(uuid)
   station.delete()
   return {"message": "station deleted"}
 
