@@ -1,5 +1,5 @@
 from .base import BaseDriver
-from ..services import mysql, ropi, time, weewx
+from ..services import mysql, ropi, time, weewx, disk
 
 # Ejecutor por defecto
 DRIVER_EXECUTOR = 'SSH'
@@ -11,6 +11,7 @@ DEFAULT_SERVICES_MAP = {
     "mysql": mysql.service,
     "weewx": weewx.service,
     "RoPi": ropi.service,
+    "disk": disk.service,
 }
 
 class RpiDavisStation(BaseDriver):

@@ -1,5 +1,5 @@
 from .base import BaseDriver
-from ..services import mysql, ropi, time, weewx, proxy, campbell
+from ..services import mysql, ropi, time, weewx, proxy, campbell, disk
 
 # Ejecutor por defecto
 DRIVER_EXECUTOR = 'SSH'
@@ -12,6 +12,7 @@ DEFAULT_SERVICES_MAP = {
     "weewx": weewx.service,
     "RoPi": ropi.service,
     "proxy": proxy.service,
+    "disk": disk.service,
 }
 
 class RpiCampbellStation(BaseDriver):
